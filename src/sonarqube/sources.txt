@@ -1,0 +1,12 @@
+https://www.owasp.org/index.php/Static_Code_Analysis#Description
+https://www.perforce.com/resources/qac/coding-standards
+https://www.perforce.com/blog/qac/what-are-false-positives-and-false-negatives
+https://www.testingexcellence.com/static-analysis-vs-dynamic-analysis-software-testing/
+https://fr.wikipedia.org/wiki/Analyse_statique_de_programmes
+https://en.wikipedia.org/wiki/Code_review
+https://en.wikipedia.org/wiki/Program_analysis
+https://en.wikipedia.org/wiki/Automated_code_review
+https://en.wikipedia.org/wiki/Static_program_analysis
+https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-maven/
+https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
+https://docs.sonarqube.org/latest/user-guide/issues/

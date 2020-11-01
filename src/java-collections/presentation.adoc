@@ -1,0 +1,112 @@
+= Collections en Java
+Joseph Verron <joseph@verron.pro>
+:toc:
+:imagesdir: assets/images
+:source-highlighter: highlightjs
+
+== Array
+
+[source, java]
+----
+public static void main(String[] args){
+    
+    int nb = 3;
+    String[] boyNames = new String[nb];
+    names[0] = "Nathan";
+    names[1] = "Lucas";
+    names[2] = "Enzo";
+
+    String[] girlNames = {"Emma","Léa","Chloé"};
+
+    double[][] matrix = new double[10][10];
+    
+
+    int[][]  dimensions = new int[3][];
+    dimensions[0] = new int[4];
+    dimensions[1] = new int[9];
+    dimensions[2] = new int[2];
+
+
+    int[5] tableau = {10, 20, 30, 40, 50};
+    int[] tableau = {10, 20, 30, 40, 50};
+    int[3][2] tableau = {{5, 1}, 
+                        {6, 2},
+                        {7, 3}};
+    int[][] tableau = {{1, 2, 3, 4, 5, 6},
+                         {1, 2, 3, 4},                     {1, 2, 3, 4, 5, 6, 7, 8, 9}};
+}
+----
+
+=== Utilitaires
+
+=== Reflection
+
+== Api Legacy
+
+=== Vector
+
+=== Stack
+
+=== Hashtable
+
+==== Dictionary
+
+==== Properties
+
+=== BitSet
+
+=== Enumeration
+
+=== Hashtable
+
+== Framework Collections
+
+=== Collection
+
+=== List
+
+=== Set
+
+==== SortedSet
+
+==== NavigableSet
+
+=== Map
+
+=== Sorted Map
+
+=== Navigable Map
+
+=== Queue
+
+==== Deque
+
+== Streams
+
+[source, java]
+----
+public class MathUtils{
+    int divide(boolean entry){
+        int x;
+        if(entry){
+            x = 0;
+        } else {
+            x = 5;
+        }
+        return 10/x;
+    }
+}
+----
+
+[.notes]
+Impossible de savoir quelle valeur x va réellement avoir au runtime, l'outil d'analyse peut donc rapporter une erreur
+
+== Branch analysis
+* Short-lived branches image:short-lived-branch-concept.png[short-lived, role="right"]
+** disappear quickly
+** will be merged rapidly
+** is developed for a given version
+* Long-lived branches image:long-lived-branch-concept.png[long-lived, role="right"]
+* Master/main branch
+* https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-maven/[SonarScanner for Maven ]
+* https://github.com/emilybache/Roadload-Refactoring-Kata
