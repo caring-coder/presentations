@@ -1,0 +1,77 @@
+= Framework Collections
+
+== Collection
+
+[graphviz, align="center"]
+----
+digraph G {
+  graph[bgcolor=transparent, rankdir=TB, color=grey]
+  node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+  edge[color=white, fontcolor="white", fontname="Consolas"]
+  
+  Iterable 
+  Iterator
+  Collection
+  Collection -> Iterable
+
+  subgraph cluster_list {
+    List
+    RandomAccess
+    ListIterator
+    List -> ListIterator [label="listIterator()", style=dotted]
+  }
+
+  subgraph cluster_queue {
+    Queue
+    BlockingQueue -> Queue
+    Deque -> Queue
+    BlockingDeque -> Deque
+    BlockingDeque -> BlockingQueue
+    TransferQueue -> BlockingQueue
+  }
+
+  List -> Collection
+  ListIterator -> Iterator
+
+  subgraph cluster_set {
+    Set
+    SortedSet -> Set
+    NavigableSet -> SortedSet
+  }
+
+  Set -> Collection
+
+
+  subgraph cluster_map {
+    SortedMap -> Map
+    ConcurrentMap -> Map
+    NavigableMap -> SortedMap
+    ConcurrentNavigableMap -> ConcurrentMap
+    ConcurrentNavigableMap -> NavigableMap
+  }
+    
+  Queue -> Collection
+  Map -> Set [label="keys()", style=dotted]
+  Map -> Collection [label="keys()", style=dotted]
+  Iterable -> Iterator [label="iterator()", style=dotted]
+}
+----
+
+== List
+
+== Set
+
+=== SortedSet
+
+=== NavigableSet
+
+== Map
+
+== Sorted Map
+
+== Navigable Map
+
+== Queue
+
+=== Deque
+

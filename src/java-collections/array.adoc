@@ -1,0 +1,133 @@
+= Array
+
+[graphviz]
+----
+digraph G {
+  graph[bgcolor=transparent]
+  node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+  edge[color=white, fontcolor="white", fontname="Consolas"]
+
+  a [label=" 0 | 1 | 2 | 3 | 4 "]
+}
+----
+
+== Simple declaration
+
+[source, java]
+----
+class Application{
+  public static void main(String[] args){
+    int nb = 3;
+    String[] boyNames = new String[nb];
+    names[0] = "Camille";
+    names[1] = "Lucas";
+    names[2] = "Enzo";
+
+    double[][] matrix = new double[4][4];
+    int[][]  dimensions = new int[2][];
+    dimensions[0] = new int[4];
+    dimensions[1] = new int[9];
+  }
+}
+----
+
+== Advanced declaration
+
+[source, java]
+----
+class Application{
+  public static void main(String[] args){
+    String[] girlNames = {"Camille","Léa","Chloé"};
+    int[] indices = {10, 20, 30, 40, 50};
+    int[][] valueSet = {{}, {1}, {2, 3}};
+
+    Object[] objects = {
+      girlNames[0],
+      girlNames[0].length(),
+      indices,
+      valueSet.length};
+  }
+}
+----
+
+== Utilitaires
+
+[source, java]
+----
+class Application{
+  public static void main(String[] args){
+    String[] boyNames = {"Camille","Lucas","Enzo"};
+    String[] girlNames = {"Camille","Léa","Chloé"};
+    
+    Arrays.equals(boyNames, girlNames);
+    Arrays.hashCode(girlNames);
+    Arrays.toString(boyNames);
+    
+    double[][] polygonA = {{0.0, 0.0}, {0.0, 1.0}, {2.0, 0.0}};
+    double[][] polygonB = {{0.0, 0.0}, {0.0, 1.0}, {2.0, 0.0}};
+    Arrays.deepEquals(polygonA, polygonB);
+    Arrays.deepHashCode(polygonB);
+    Arrays.deepToString(polygonA);
+  }
+}
+----
+
+== Utilitaires 1/2
+
+[source, java]
+----
+class Application{
+  public static void main(String[] args){
+    double[][] polygonA = {{0.0, 0.0}, {0.0, 1.0}, {2.0, 0.0}};
+    double[][] polygonB = Arrays.copyOf(polygonA);
+    
+    System.arraycopy(polygonA, 0, polygonB, 0, polygonA.length); 
+
+    String[] boyNames = {"Camille","Lucas", /*...,*/ "Enzo"};
+    String[] range = Arrays.copyOfRange(boyNames, boyNames.length - 2, boyNames.length);
+
+    char[] password = {'b', 'a', 'd', 'p', 'w', 'd', '0', '!'};
+    Arrays.fill(password, '\0');
+  }
+}
+----
+
+== Utilitaires 2/2
+
+[source, java]
+----
+class Application{
+  public static void main(String[] args){
+    String[] boyNames = {"Camille","Lucas","Enzo"};
+    String[] girlNames = {"Camille","Léa","Chloé"};
+    
+    Arrays.equals(boyNames, girlNames);
+    Arrays.hashCode(girlNames);
+    Arrays.toString(boyNames);
+    
+    double[][] polygonA = {{0.0, 0.0}, {0.0, 1.0}, {2.0, 0.0}};
+    double[][] polygonB = {{0.0, 0.0}, {0.0, 1.0}, {2.0, 0.0}};
+    Arrays.deepEquals(polygonA, polygonB);
+    Arrays.deepHashCode(polygonB);
+    Arrays.deepToString(polygonA);
+  }
+}
+----
+
+== Reflection
+
+[source, java]
+----
+class Application{
+  public static void main(String[] args){
+    Object object = "Object typed from an API";
+    Object anotherObject = "Another object typed from the same API";
+
+    Object array = Array.newInstance(object.getClass(), 2);
+    Array.set(array, 0, object);
+    Array.set(array, 1, anotherObject);
+
+    Object o = Array.get(array, 0);
+  }
+}
+----

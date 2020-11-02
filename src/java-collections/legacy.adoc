@@ -1,0 +1,251 @@
+= Legacy
+
+[graphviz, align="center"]
+----
+digraph G {
+  graph[bgcolor=transparent]
+  node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+  edge[color=white, fontcolor="white", fontname="Consolas"]
+  
+  Stack -> Vector 
+  Vector -> Enumeration [label="elements()", style="dotted"]
+  
+  Hashtable -> Dictionary
+  Dictionary -> Enumeration [label="elements()", style="dotted"]
+  Dictionary -> Enumeration [label="keys()", style="dotted"]
+
+  Properties -> Hashtable
+
+  StringTokenizer -> Enumeration
+
+  BitSet
+}
+----
+
+== Enumeration
+
+[plantuml, align="center"]
+----
+@startuml
+
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+
+interface Enumeration {
+    boolean hasMoreElements()
+    Object nextElement()
+}
+@enduml
+----
+
+== Vector
+
+[cols=2, frame=none, grid=none]
+|===
+a|[plantuml, align="center"]
+----
+@startuml
+
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+
+interface Enumeration {
+    boolean hasMoreElements()
+    Object nextElement()
+}
+
+class Vector {
+    # Object[] elementData;
+    # int elementCount;
+    + int size()
+    + Object elementAt(int)
+    + void addElement(Object)
+    + void insertElementAt(Object, int)
+    + void setElementAt(Object, int)
+    + void removeElementAt(int)
+    + void removeAllElements()
+    + Object firstElement()
+    + Object lastElement()
+}
+
+Vector --> Enumeration : elements()
+@enduml
+----
+a|[plantuml, align="center"]
+----
+@startuml
+
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+participant User
+create Vector
+User -> Vector: new Vector()
+create array
+Vector -> array: new Object[10]
+array --> Vector
+Vector --> User
+
+loop 10times
+    User -> Vector: add(Object)
+    Vector -> array: set(elementCount)
+    array --> Vector
+    Vector --> User
+end
+
+User -> Vector: add(Object)
+note over Vector, array
+    copy the  content of array into 
+    another array twice the size
+end note
+
+Vector -> array: set(elementCount)
+array --> Vector
+Vector --> User
+
+@enduml
+----
+|===
+
+== Stack
+
+[cols=2, frame=none, grid=none]
+|===
+a|[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+
+class Vector {
+    + int size()
+    + Object elementAt(int)
+    + Object firstElement()
+    + Object lastElement()
+}
+
+class Stack {
+    + Object push(Object)
+    + Object pop()
+    + Object peek()
+    + boolean empty()
+    + int search(Object)
+}
+Stack  -\|> Vector
+@enduml
+----
+a|[graphviz, align="center"]
+----
+digraph G{
+    graph[bgcolor=transparent]
+    node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+    edge[color=white, fontcolor="white", fontname="Consolas"]    
+
+    push[label="push", shape=none, contraint=false]
+    stack[label="item1\|item2\|<2>item3\|____"]
+    pop[label="pop/peek", shape=none, contraint=false]
+    
+    push -> stack:2 -> pop;
+
+    {rank=same; push; pop;}  
+}
+----
+|===
+
+== Dictionary, Hashtable, Properties
+
+[plantuml, align="center"]
+----
+@startuml
+
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+
+class Properties{
+    + void load(Reader)
+    + void load(InputStream)
+    + void loadFromXML(InputStream)
+    + void store(Writer)
+    + void store(OutputStream)
+    + void storeToXML(OutputStream, String)
+}
+
+class Hashtable{
+    + boolean replace(Object, Object, Object)
+    + Object replace(Object, Object)
+}
+
+abstract Dictionary{
+    + int size()
+    + boolean isEmpty()
+    + Object get(Object)
+    + Object put(Object, Object)
+    + Object remove(Object)
+}
+
+interface Enumeration {
+    boolean hasMoreElements()
+    Object nextElement()
+}
+
+Dictionary --> Enumeration : elements()
+Dictionary --> Enumeration : keys()
+
+Properties -|> Hashtable
+Hashtable -|> Dictionary
+
+@enduml
+----
+
+== BitSet
+
+[source, java]
+----
+boolean[] bits = new boolean[1024];
+System.out.println(ClassLayout.parseInstance(bits).toPrintable());
+----
+----
+[Z object internals:
+ OFFSET  SIZE      TYPE DESCRIPTION            VALUE
+      0     4           (object header)        01 00 00 00 (00000001 00000000 00000000 00000000) (1)
+      4     4           (object header)        00 00 00 00 (00000000 00000000 00000000 00000000) (0)
+      8     4           (object header)        7b 12 07 00 (01111011 00010010 00000111 00000000) (463483)
+     12     4           (object header)        00 04 00 00 (00000000 00000100 00000000 00000000) (1024)
+     16  1024   boolean [Z.                    N/A
+Instance size: 1040 bytes
+----
+
+[plantuml, align="center"]
+----
+@startuml
+
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+
+class BitSet{
+    + {static} valueOf(Long[]/LongBuffer)
+    + {static} valueOf(Byte[]/ByteBuffer)
+    ---
+    + void set(int, int)
+    + void clear(int, int)
+    + void flip(int, int)
+    + boolean get(int, int)
+    + BitSet get(int, int)
+    ---
+    + void and(BitSet)
+    + void andNot(BitSet)
+    + void xor(BitSet)
+    + void or(BitSet)
+    ---
+    ...
+}
+
+@enduml
+----
+
+
