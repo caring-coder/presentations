@@ -1,77 +1,580 @@
-= Framework Collections
-
-== Collection
+= Collections Framework
 
 [graphviz, align="center"]
 ----
 digraph G {
-  graph[bgcolor=transparent, rankdir=TB, color=grey]
+  graph[bgcolor=transparent, color=grey]
   node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
   edge[color=white, fontcolor="white", fontname="Consolas"]
   
-  Iterable 
   Iterator
-  Collection
+  Iterable
+  Collection [color=green]
+  List [color=green]
+  Queue [color=green]
+  Deque
+  Set [color=green]
+  SortedSet
+  Map [color=green]
+  SortedMap
+
+  Comparable
+  Comparator
+
+  {Comparable, Comparator} -> SortedSet  [style=invis]
+  {Comparable, Comparator} -> SortedMap  [style=invis]
+
   Collection -> Iterable
+  {List, Queue, Set} -> Collection
+  Deque -> Queue
+  SortedSet -> Set
+  SortedMap -> Map
+  Iterator -> Iterable [label="iterator()", dir=back, style=dotted, color=grey, fontcolor=grey]
 
-  subgraph cluster_list {
-    List
-    RandomAccess
-    ListIterator
-    List -> ListIterator [label="listIterator()", style=dotted]
-  }
-
-  subgraph cluster_queue {
-    Queue
-    BlockingQueue -> Queue
-    Deque -> Queue
-    BlockingDeque -> Deque
-    BlockingDeque -> BlockingQueue
-    TransferQueue -> BlockingQueue
-  }
-
-  List -> Collection
-  ListIterator -> Iterator
-
-  subgraph cluster_set {
-    Set
-    SortedSet -> Set
-    NavigableSet -> SortedSet
-  }
-
-  Set -> Collection
-
-
-  subgraph cluster_map {
-    SortedMap -> Map
-    ConcurrentMap -> Map
-    NavigableMap -> SortedMap
-    ConcurrentNavigableMap -> ConcurrentMap
-    ConcurrentNavigableMap -> NavigableMap
-  }
-    
-  Queue -> Collection
-  Map -> Set [label="keys()", style=dotted]
-  Map -> Collection [label="keys()", style=dotted]
-  Iterable -> Iterator [label="iterator()", style=dotted]
+  Set -> Map [label="keys()", dir=back, style=dotted, color=grey, fontcolor=grey]
+  Set -> Map [label="entrySet()", dir=back, style=dotted, color=grey, fontcolor=grey]
+  Collection -> Map [label="values()", dir=back, style=dotted, color=grey, fontcolor=grey]
 }
+----
+
+== Abstract implementations
+
+[graphviz, align="center"]
+----
+digraph G {
+  graph[bgcolor=transparent, color=grey]
+  node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+  edge[color=white, fontcolor="white", fontname="Consolas"]
+  
+  Collection [color=gray, fontcolor=grey]
+  List [color=gray, fontcolor=grey]
+  Set [color=gray, fontcolor=grey]
+  Queue [color=gray, fontcolor=grey]
+  Map [color=gray, fontcolor=grey]
+
+  List -> Collection [color=gray]
+  Set -> Collection [color=gray]
+  Queue -> Collection [color=gray]
+
+  AbstractCollection -> Collection
+  AbstractList -> {AbstractCollection, List}
+  AbstractSequentialList -> AbstractList
+  AbstractSet -> {AbstractCollection, Set}
+  AbstractQueue -> {AbstractCollection, Queue}
+  AbstractMap -> Map
+}
+----
+
+== Collection Interface
+
+|===
+| constructor | traverse
+a|
+[source, java]
+----
+Collection()
+Collection(Collection<? extends E> c)
+----
+a|
+[source, java]
+----
+boolean equals(Object o)
+int hashCode()
+Object[] toArray()
+<T> T[] toArray(T[] a)
+----
+| presence | traverse
+a|
+[source, java]
+----
+boolean isEmpty()
+boolean contains(Object o)
+boolean containsAll(Collection<?> c)
+----
+a|
+[source, java]
+----
+Iterator<E> iterator()
+----
+| add [Optional, may throw UnsupportedOperationException] |  remove [Optional, may throw UnsupportedOperationException] 
+a|
+[source, java]
+----
+boolean add(E e)
+boolean addAll(Collection<? extends E> c)
+----
+a|
+[source, java]
+----
+void clear()
+boolean remove(Object o)
+boolean removeAll(Collection<? extends E> c)
+boolean retainAll(Collection<? extends E> c)
+----
+|===
+
+== Iterator
+
+[plantuml, align="center"]
+----
+@startuml
+
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+
+interface Enumeration<E> {
+    boolean hasMoreElements()
+    E nextElement()
+}
+
+interface Iterator<E>  {
+    boolean hasNext()
+    E next()
+    void remove()
+}
+@enduml
 ----
 
 == List
 
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface List<E>
+interface RandomAccess
+abstract AbstractList<E>
+abstract AbstractSequentialList<E>
+class LinkedList<E> #grey 
+class ArrayList<E> #grey
+class Arrays.asList<E> #grey
+class CopyOnWriteArrayList<E> #grey
+class SubList<E>
+class RandomAccessSubList<E>
+
+AbstractSequentialList --|> AbstractList
+LinkedList --|> AbstractSequentialList
+ArrayList --|> AbstractList
+CopyOnWriteArrayList ..|> List
+CopyOnWriteArrayList ..|> RandomAccess
+ArrayList ..|> RandomAccess
+SubList --|> AbstractList
+RandomAccessSubList ..|> RandomAccess
+RandomAccessSubList --|> SubList
+Arrays.asList ..|> RandomAccess
+Arrays.asList ..|> AbstractList
+@enduml
+----
+
+=== List Interface
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface List<E>{
+  void add(int index, E e)
+  boolean addAll(int index, Collection<? extends E> c)
+  --
+  int indexOf(Object o)
+  int lastIndexOf(Object o)
+  E get(int index)
+  E set(int index, E e)
+  E remove(int index)
+  --
+  ListIterator<E> listIterator()
+  ListIterator<E> listIterator(int indx)
+  --
+  List<E> subList(int fromIndex, int toIndex)
+}
+
+interface ListIterator<E> {
+  boolean hasNext() // from Iterator<E>
+  E next() // from Iterator<E>
+  int nextIndex()
+  --
+  void set(E e)
+  void add(E e)
+  void remove() // from Iterator<E>
+  --
+  boolean hasPrevious()
+  E previous()
+  int previousIndex()  
+}
+@enduml
+----
+
+=== ArrayList
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+
+participant User
+create ArrayList
+User -> ArrayList: new ArrayList()
+create array
+ArrayList -> array: new Object[10]
+array --> ArrayList
+ArrayList --> User
+
+loop 10times
+    User -> ArrayList: add(Object)
+    ArrayList -> array: set(elementCount)
+    array --> ArrayList
+    ArrayList --> User
+end
+
+User -> ArrayList: add(Object)
+note over ArrayList, array
+    copy the  content of array into 
+    another array twice the size
+end note
+
+ArrayList -> array: set(elementCount)
+array --> ArrayList
+ArrayList --> User
+@enduml
+----
+
+=== LinkedList
+
+[cols=2, frame=none, grid=none]
+|===
+a|[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface LinkedList<E>{
+  void addFirst(E e)
+  E getFirst()
+  E removeFirst()
+  --
+  void addLast(E e)
+  E getLast()
+  E removeLast()
+}
+
+LinkedList ..\|> List
+LinkedList ..\|> Deque
+@enduml
+----
+a|[graphviz, align="center"]
+----
+digraph G{
+    graph[bgcolor=transparent, rankdir=LR]
+    node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+    edge[color=white, fontcolor="white", fontname="Consolas", tailclip=false]    
+
+    item0 [label="<v>0\|<p>"]
+    item1 [label="<v>1\|<p>"]
+    item2 [label="<v>2\|<p>"]
+    null [shape=none]
+
+    item0:p:c -> item1:v
+    item1:p:c -> item2:v
+    item2:p:c -> null
+}
+----
+|===
+
+=== CopyOnWriteArrayList
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+class CopyOnWriteArrayList<E>{
+  boolean addIfAbsent(int index, E e)
+  int addAllAbsent(Collection< ? extends E>)
+}
+@enduml
+----
+
+=== Arrays.asList
+
+[source, java]
+----
+class Application {
+  public static void main(String[] args){
+    Arrays.asList(1, 2, 3 ,4);
+    List.of(1,2,3,4);
+  }
+}
+----
+
 == Set
 
-=== SortedSet
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
 
-=== NavigableSet
+interface Set<E>
+interface SortedSet<E>
+interface NavigableSet<E>
+
+abstract AbstractSet<E>
+abstract EnumSet<E>
+
+class HashSet<E> #grey 
+class LinkedHashSet<E> #grey
+class TreeSet<E> #grey
+class CopyOnWriteArraySet<E> #grey
+class ConcurrentSkipListSet<E>
+
+SortedSet --|> Set
+NavigableSet --|> SortedSet
+
+AbstractSet ..|> Set
+HashSet ..|> Set
+LinkedHashSet ..|> Set
+TreeSet ..|> NavigableSet
+ConcurrentSkipListSet ..|> NavigableSet
+
+EnumSet --|> AbstractSet
+HashSet --|> AbstractSet
+CopyOnWriteArraySet --|> AbstractSet
+TreeSet --|> AbstractSet
+ConcurrentSkipListSet --|> AbstractSet
+
+LinkedHashSet --|> HashSet
+@enduml
+----
+
+== Set Interfaces
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface Collection<E>{
+  boolean isEmpty()
+  boolean contains(Object o)
+  boolean containsAll(Collection<?> c)
+  
+  boolean add(E e)
+  boolean addAll(Collection<? extends E> c)
+  
+  void clear()
+  boolean remove(Object o)
+  boolean removeAll(Collection<? extends E> c)
+  boolean retainAll(Collection<? extends E> c)
+}
+
+interface Set<E>
+
+interface SortedSet<E>{
+  E first()
+  E last()
+  SortedSet headSet(E toElement)
+  SortedSet tailSet(E fromElement)
+  SortedSet subSet(E fromElement, E toElement)
+  Comparator<? super E> comparator()
+}
+
+interface NavigableSet<E>{
+  E ceiling(E e)
+  E floor(E e)
+  E higher(E e)
+  E lower(E e)
+
+  E pollFirst()
+  E pollLast()
+  
+  NavigableSet<E> headSet(E toElement, boolean inclusive)
+  NavigableSet<E> tailSet(E fromElement, boolean inclusive)
+
+  NavigableSet<E> subSet(E from, boolean inclusive, E to, boolean inclusive)
+
+  Iterator<E> descendingIterator()
+  NavigableSet<E> descendingSet()
+}
+
+Collection <|- Set
+Set <|- SortedSet
+SortedSet <|- NavigableSet
+@enduml
+----
+
+=== HashSet
+
+=== LinkedHashSet
+
+=== EnumSet
+
+=== TreeSet
+
+=== ConcurrentSkipListSet
+
+=== CopyOnWriteArraySet
 
 == Map
 
-== Sorted Map
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
 
-== Navigable Map
+interface Map<K, V>
+interface SortedMap<K, V>
+interface NavigableMap<K, V>
+abstract AbstractMap<K, V>
+
+interface ConcurrentMap<K, V>
+interface ConcurrentNavigableMap<K, V>
+
+class ConcurrentHashMap<K, V>
+class ConcurrentSkipListMap<K, V>
+
+class EnumMap<K, V>
+class HashMap<K, V>
+class LinkedHashMap<K, V>
+class IdentityHashMap<K, V>
+class WeakHashMap<E>
+class TreeMap<E>
+
+SortedMap --|> Map
+NavigableMap --|> SortedMap
+ConcurrentMap --|> Map
+ConcurrentNavigableMap --|> NavigableMap
+ConcurrentNavigableMap --|> ConcurrentMap
+
+AbstractMap ..|> Map
+ConcurrentHashMap ..|> ConcurrentMap
+ConcurrentSkipListMap ..|> NavigableMap
+
+AbstractMap <|-- EnumMap
+AbstractMap <|-- HashMap
+AbstractMap <|-- IdentityHashMap
+WeakHashMap --|> AbstractMap
+TreeMap --|> AbstractMap
+ConcurrentHashMap --|> AbstractMap
+ConcurrentSkipListMap --|> AbstractMap
+
+LinkedHashMap --|> HashMap
+@enduml
+----
+
+=== Map Interface
+
+=== HashMap
+
+=== LinkedHashMap
+
+=== ConcurrentHashMap
+
+=== TreeMap
+
+=== EnumMap
+
+=== WeakHashMap
+
+=== IdentityHashMap
 
 == Queue
 
-=== Deque
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface Queue<E>
+interface Deque<E>
+interface BlockingQueue<E>
+interface BlockingDeque<E>
+interface TransferQueue<E>
+
+abstract AbstractQueue<E>
+
+class LinkedList<E>
+class ArrayDeque<E>
+class ConcurrentLinkedQueue<E>
+class PriorityBlockingQueue<E>
+class PriorityQueue<E>
+class ArrayBlockingQueue<E>
+class LinkedTransferQueue<E>
+class DelayQueue<E>
+class LinkedBlockingQueue<E>
+class SynchronousQueue<E>
+@enduml
+----
+
+=== Queue Interface
+
+=== LinkedTransferQueue
+
+=== PriorityQueue
+
+=== ConcurrentLinkedQueue
+
+=== Deque Interface
+
+=== ArrayDeque
+
+=== BlockingQueue interface
+
+=== ArrayBlockingQueue
+
+=== LinkedBlockingQueue
+
+=== PriorityBlockingQueue
+
+=== DelayQueue
+
+=== SynchronousQueue
+
+=== BlockingDeque interface
+
+=== LinkedBlockingDeque
+
+== Sorting
+
+=== Comparable
+
+=== Comparator
+
+== Collections Algorithms
 

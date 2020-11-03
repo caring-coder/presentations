@@ -1,10 +1,8 @@
-@echo off
-
 echo.== found ==
 dir /b src
 echo.
 
-for /f %%G in ('dir /b src') do @(
+for /f %%G in ('dir /b src') do (
 	echo.== treating %%G ==
 	if not exist "target\%%G\" (
 		mkdir "target\%%G"

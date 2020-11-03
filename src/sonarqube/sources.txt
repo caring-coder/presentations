@@ -10,3 +10,5 @@ https://en.wikipedia.org/wiki/Static_program_analysis
 https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-maven/
 https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
 https://docs.sonarqube.org/latest/user-guide/issues/
+
+https://wiki.sei.cmu.edu/confluence/display/java/Rule+AA.+References

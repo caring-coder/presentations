@@ -1,245 +1,221 @@
-= Sonarqube, pourquoi c'est bien ?
+= Analyser la qualité de son code avec SonarQube
 Joseph Verron <joseph.verron@softeam.fr>
 :toc:
 :imagesdir: assets/images
+:source-highlighter: highlightjs
 
-ou De l'analyse statique de code et ses bienfaits
+[%notitle]
+== Only Valid Code Quality Measurement
 
-== Analysis
-* Analyse Statique
-* Analyse Statique de Code
-** Standards & Guidelines
-*** MISRA
-*** ISO 26262
-* Analyse Dynamique
-** Tests unitaires
-** Profiler
-** ...
+image::wtfs_per_minute_thumb.jpg[wtf-per-minute, height=560]
 
-== Limitations
+== Analyse de programme
+
+=== Dynamique
+[%step]
+* tests unitaires
+* fuzzer
+* profileur exact, statistique, de latence
+* analyse de teinte
+* débogueur
+* analyse energétique
+
+[.notes]
+****
+* Fuzzer -> input aléatoire pour tester un range de valeurs
+* Profileur exact -> ralenti l'exécution
+* Profileur statistique (sampling profiler) -> profile de temps en temps
+* Profileur de latence -> l'attente pendant les interactions avec GUI
+* Analyse de teinte -> mesure de la propagation d'une donnée dans une ou plusieurs applications
+****
+
+=== Méthodes Formelles
+[%step]
+* typage
+* model-checking
+* interprétation abstraite
+* vérification déductive
+
+[.notes]
+****
+* typage -> restriction des classes de programmes possibles
+* model-checking -> analyse exhaustive de l'évolution du programme
+* interprétation abstraite -> analyse d'un sur-ensemble des états possibles
+* vérification déductive -> méthode où l'on démontre la complétude et la correction sémantique des éléments du programme
+
+Alonzo Church, Kurt Gödel et Alan Turing, dans les années 1930 démontrent avec le problème de l'arrêt et le théorème de Rice que l’analyse de programmes n'est pas déterministe.
+Il n’existe aucune méthode « mécanique » qui peut toujours dire sans se tromper au vu d’un programme si celui-ci va ou non produire des erreurs à l’exécution.
+****
+
+=== Revue de code
+[%step]
+* Inspection formelle
+* Revue des changements
+* Revue par dessus l'épaule
+* Binômage
+* Revue automatisée
+
+[.notes]
+****
+* Inspection formelle -> efficace mais lourd
+* Revue des changements -> diff reviews, pull/merge request
+* Revue par dessus l'épaule -> explication du developpeur à un collègue, en général sur son poste
+* Binômage -> Developpement à deux sur la même machine
+****
+
+== Automatisation de la revue de code
+
+=== Limitations
 * Ne comprends pas l'intention du développeur
-* Certaines règles ne se prêtent pas à l'auomatisation
+* Tout n'est pas automatisable
 * Faux positifs et faux négatifs
 
+[%notitle]
+=== Limitations - Exemple
 [source, java]
-----
+--
 public class MathUtils{
-    int divide(boolean entry){
+    public int divide(boolean entry){
         int x;
-        if(entry){
-            x = 0;
-        } else {
-            x = 5;
-        }
+        if(entry){ x = 0; }
+        else { x = 5; }
         return 10/x;
     }
 }
-----
+--
 
-[.note]
-Impossible de savoir quelle valeur x va réellement avoir au runtime, l'outil d'analyse peut donc rapporter une erreur
-
-== Avantages
+=== Avantages
 * Rapidité
-
-[.note]
- Plus rapide qu'une revue de code manuelle
-
 * Exhaustivité
-[.note]
-Impossible de tester tout les cas avec des tests unitaires, l'analyse statique de code peut le faire
-
 * Précision
-[.note]
-Il est possible de rater des éléments avec une reveue manuelle, pas avec des outils automatisés
 
-== SonarQube concepts
-* https://docs.sonarqube.org/latest/[Latest Documentation]
-Concept	Definition
-* Bug:	An issue that represents something wrong in the code. If this has not broken yet, it will, and probably at the worst possible moment. This needs to be fixed. Yesterday.
-* Code Smell:	A maintainability-related issue in the code. Leaving it as-is means that at best maintainers will have a harder time than they should making changes to the code. At worst, they'll be so confused by the state of the code that they'll introduce additional errors as they make changes.
-* Issue:	When a piece of code does not comply with a rule, an issue is logged on the snapshot. An issue can be logged on a source file or a unit test file. There are 3 types of issue: Bugs, Code Smells and Vulnerabilities
-* Measure:	The value of a metric for a given file or project at a given time. For example, 125 lines of code on class MyClass or density of duplicated lines of 30.5% on project myProject
-* Metric:	A type of measurement. Metrics can have varying values, or measures, over time. Examples: number of lines of code, complexity, etc. A metric may be either qualitative (gives a quality indication on the component, E.G. density of duplicated lines, line coverage by tests, etc.) or quantitative (does not give a quality indication on the component, E.G. number of lines of code, complexity, etc.)
-* New Code Period:	The period for which you're keeping a close watch on the introduction of new problems in the code. Ideally this is since the previous_version, but if you don't use a Maven-like versioning scheme you may need to set a relatively arbitrary time period such as 21 days or since a specific date.
-* Quality Profile:	A set of rules. Each snapshot is based on a single quality profile. See also Quality Profiles
-* Rule:	A coding standard or practice which should be followed. Not complying with coding rules leads to Bugs, Vulnerabilities, Security Hotspots, and Code Smells. Rules can check quality on code files or unit tests.
-* Remediation Cost:	The estimated time required to fix Vulnerability and Reliability Issues.
-* Snapshot:	A set of measures and issues on a given project at a given time. A snapshot is generated for each analysis.
-* Security Hotspot:	A security-related issue highlighting a piece of code that uses a security-sensitive API (E.G. use of a weak algorithm, connection to a database, ...). Security Hotspots must be manually reviewed to determine if the APIs are being used in ways that introduce Vulnerabilities.
-* Technical Debt:	The estimated time required to fix all Maintainability Issues / code smells
-* Vulnerability:	A security-related issue which represents a backdoor for attackers. See also Security-related rules.
+[.notes]
+****
+* Rapidité -> temps ridiculement court comparé à une revue humaine
+* Exhaustivité -> l'intégralité du code peut être analysée
+* Précision -> erreurs trouvé à des lignes de code précise
+****
 
-Overview
-In SonarQube, analyzers contribute rules which are executed on source code to generate issues. There are four types of rules:
+[%notitle]
+=== Avantages - Exemple
+https://www.sonarqube.org/[Latest Documentation]
 
-Code Smell (Maintainability domain)
-Bug (Reliability domain)
-Vulnerability (Security domain)
-Security Hotspot (Security domain)
-For Code Smells and Bugs, zero false-positives are expected. At least this is the target so that developers don't have to wonder if a fix is required.
+== SonarQube
 
-For Vulnerabilities, the target is to have more than 80% of issues be true-positives.
+https://docs.sonarqube.org/latest/[Latest Documentation]
 
-Security Hotspot rules draw attention to code that is security-sensitive. It is expected that more than 80% of the issues will be quickly resolved as "Reviewed" after review by a developer.
+[.stretch]
+image::sonarqube-icon.svg[sonarqube-logo]
 
-The Rules page is the entry point where you can discover all the existing rules or create new ones based on provided templates.
+=== Concepts
+[%step]
+* Metric:	Type de mesure, qualitative ou quantitative
+* Measure:	Valeur d'une métrique sur un fichier ou un projet à un instant T
+* Rule:	Un standard ou une pratique à suivre.
 
-Rules
-By default, when entering the top menu item "Rules", you will see all the available rules brought by the analyzers installed on your SonarQube instance. You have the ability to narrow the selection based on search criteria in the left pane:
+=== Issue
+Violation de règle à un instant T
+[%step]
+* Bug: Une erreur dans le code
+* Code Smell:	Un problème de maintenance probable dans le code.
+* Vulnerability:	Un problème de sécurité.
+* Security Hotspot:	Avertissement lié à la sécurité d'une librairie
 
-Language: the language to which a rule applies.
-Type: Bug, Vulnerability, Code Smell or Security Hotspot rules.
-Tag: it is possible to add tags to rules in order to classify them and to help discover them more easily.
-Repository: the engine/analyzer that contributes rules to SonarQube.
-Default Severity: the original severity of the rule - as defined by the analyzer that contributes this rule.
-Status: rules can have 3 different statuses:
+=== Spécificités
+[%step]
+* Quality Profile:	Ensembles de règles.
+* Snapshot:	Ensemble de mesures et violations d'un profil qualité à un instant T, généré à chaque analyse
+* Remediation Cost:	Temps estimé pour réparer les Vulnerability and Reliability Issues.
+* Technical Debt:	Temps estimé pour réparer les Maintainability Issues / code smells
 
-Beta: The rule has been recently implemented and we haven't gotten enough feedback from users yet, so there may be false positives or false negatives.
-Deprecated: The rule should no longer be used because a similar, but more powerful and accurate rule exists.
-Ready: The rule is ready to be used in production.
-Available Since: date when a rule was first added on SonarQube. This is useful to list all the new rules since the last upgrade of a plugin for instance.
-Template: display rule templates that allow to create custom rules (see later on this page).
-Quality Profile: inclusion in or exclusion from a specific profile
-If a quality profile is selected, it is also possible to check for its active severity and whether it is inherited or not. See the Quality Profile documentation for more.
+=== Water Leak
 
-Rule Details
-To see the details of a rule, either click on it, or use the right arrow key. Along with basic rule data, you'll also be able to see which, if any, profiles it's active in and how many open issues have been raised with it.
+image:water-leak2.jpg[water-leak, height=560]
 
-The following actions are available only if you have the right permissions ("Administer Quality Profiles and Gates"):
+[.notes]
+****
+* New Code Period
+** Global level
+** Project level
+** Branch level
+****
 
-Add/Remove Tags:
+=== Quality Gate
+Is it Releasable ?
 
-It is possible to add existing tags on a rule, or to create new ones (just enter a new name while typing in the text field).
-Note that some rules have built-in tags that you cannot remove - they are provided by the plugins which contribute the rules.
-Extend Description:
+[level-ok]#passing#
 
-You can extend rule descriptions to let users know how your organization is using a particular rule or to give more insight on a rule.
-Note that the extension will be available to non-admin users as a normal part of the rule details.
-Rule Templates and Custom Rules
-Rule Templates are provided by plugins as a basis for users to define their own custom rules in SonarQube. To find templates, select the Show Templates Only facet from the the "Template" dropdown:
+[level-warn]#warning#
 
-Rule templates.
+[level-error]#failure#
 
-To create a custom rule from a template click the Create button next to the "Custom Rules" heading and fill in the following information:
 
-Name
-Key (auto-suggested)
-Description (Markdown format is supported)
-Default Severity
-Status
-The parameters specified by the template
-You can navigate from a template to the details of custom rules defined from it by clicking the link in the "Custom Rules" section.
 
-Rule template details.
+== Règles
+* Language, Default Severity, Tag, Available Since, Template
+* Repository: engine/analyzer qui implémente la règle
+* Status: Beta, Deprecated, Ready
+* Quality Profile & Severity
 
-Custom Rules
-Custom Rules are considered like any other rule, except that you can edit or delete them:
+=== Types
+* Code erroné ou probablement erroné -> Bug rule.
+* Code exploitable par un hacker -> Vulnerability rule.
+* Relatif à la securité, à reviser manuellement -> Security Hotspot rule.
+* Sinon -> Code Smell rule.
 
-Custom rules.
+=== Severités
+What's the worst thing that could happen, and how likely will it happens ?
+|===
+|            | Très Probable        | Peu Probable
+| Très Grave | [rating-E]#E# Bloquant | [rating-D]#D# Critique
+| Peu Grave  | [rating-C]#C# Majeur   | [rating-B]#B# Mineur
+|===
+Sinon Info
 
-Note: When deleting a custom rule, it is not physically removed from the SonarQube instance. Instead, its status is set to "REMOVED". This allows current or old issues related to this rule to be displayed properly in SonarQube until they are fully removed.
+[.notes]
+****
+* Bugs
+** Impact: Could the Worst Thing cause the application to crash or to corrupt stored data?
+** Likelihood: What's the probability that the Worst Thing will happen?
+* Vulnerabilities
+** Impact: Could the exploitation of the Worst Thing result in significant damage to your assets or your users?
+** Likelihood: What is the probability that a hacker will be able to exploit the Worst Thing?
+****
 
-Extending Coding Rules
-Custom coding rules can be added. See Adding Coding Rules for detailed information and tutorials.
-
-Rule Types and Severities
-How are rules categorized?
-The SonarQube Quality Model divides rules into four categories: Bugs, Vulnerabilities, Security Hotspots, and Code Smells. Rules are assigned to categories based on the answers to these questions:
-
-Is the rule about code that is demonstrably wrong, or more likely wrong than not?
-If the answer is "yes", then it's a Bug rule.
-If not...
-
-Is the rule about code that could be exploited by a hacker?
-If so, then it's a Vulnerability rule.
-If not...
-
-Is the rule about code that is security-sensitive?
-If so, then it's a Security Hotspot rule.
-If not...
-
-Is the rule neither a Bug nor a Vulnerability?
-If so, then it's a Code Smell rule.
-
-How are severities assigned?
-To assign severity to a rule, we ask a further series of questions. The first one is basically:
-
-What's the worst thing that could happen?
-
-In answering this question, we try to factor in Murphy's Law without predicting Armageddon.
-
-Then we assess whether the impact and likelihood of the Worst Thing (see How are severity and likelihood decided?, below) are high or low, and plug the answers into a truth table:
-
-Impact	Likelihood
-Blocker
-Critical
-Major
-Minor
-How are severity and likelihood decided?
-To assess the severity of a rule, we start from the Worst Thing (see How are severities assigned?, above) and ask category-specific questions.
-
-Bugs
-Impact: Could the Worst Thing cause the application to crash or to corrupt stored data?
-
-Likelihood: What's the probability that the Worst Thing will happen?
-
-Vulnerabilities
-Impact: Could the exploitation of the Worst Thing result in significant damage to your assets or your users?
-
-Likelihood: What is the probability that a hacker will be able to exploit the Worst Thing?
-
-Security Hotspots
-Security Hotspots are not assigned severities as it is unknown whether there is truly an issue until review by a Security Auditor. When an auditor converts a Security Hotspot into a Vulnerability, severity is assigned based on the identified Vulnerability (see above).
-
-=== Platform Database/Server
-=== Scanner/Analyser
-==== Analysis
+== Analyse dans SonarQube
 * Blame data importation
 * Static analysis of source code
 * [Optional] Static analysis of compiled code
 
-== Water Leak
-Imagine coming home one day to find a puddle of water on the kitchen floor. As the puddle grows, do you start mopping or do you find the leak and plug it?
+=== Short-lived branches
+image::short-lived-branch-concept.png[short-lived]
+* de courte durée
+* rapidement mergée dans une branche parent
+* ne correspond qu'à une version
 
-The answer is obvious, right? You fix the leak!
+[.notes]
+****
+=== Pull/Merge request branches
+****
 
-So why do anything different with code quality? When you analyze an application with SonarQube and realize that it has a lot of technical debt, your initial reaction may be to start remediating or to put together a remediation plan. This is like mopping the floor while ignoring the fact that water is still leaking.
+=== Long-lived branches
+image::long-lived-branch-concept.png[long-lived]
+* représente une divergence d'avec la branche de référence
+* peut exister pour suivre plusieurs version de l'application
 
-Typically in this remediation-first approach, a periodic code quality audit, often right before release, results in findings the developers should act on. This approach consistently fails because:
-
-The code review comes too late in the process, and no stakeholder is keen to get the problems fixed; everyone wants the new version to ship.
-Developers typically push back on recommendations made by an external team that doesn't know the context of the project. And, by the way, the code under review is obsolete already.
-There is a clear lack of ownership for code quality with this approach. Who owns quality? No one!
-What gets reviewed is the entire application before it goes to production and it is obviously not possible to apply the same criteria to all applications. A negotiation will happen for each project, which will drain all credibility from the process
-Instead, why not apply the same simple logic you use at home to the way you manage code quality? Fixing the leak means focusing on the “new” code, for example, code that was added or changed after the last release. Then things get much easier:
-
-The Quality Gate can be run every day, and passing it is achievable. There are no surprises at release time.
-It's pretty difficult for developers to push back on problems they introduced the previous day. Instead, they're generally happy to fix the problems while the code is still fresh.
-There is a clear ownership of code quality
-The criteria for go/no-go are consistent across applications, and are shared among teams. Indeed new code is new code, regardless of which application it is done in
-The cost is insignificant because it is part of the development process
-As a bonus, the code that gets changed the most has the highest maintainability, and the code that doesn't get changed has the lowest, which makes a lot of sense. Because of the nature of software, and the fact that we keep making changes to it, the debt will naturally be reduced. Where it isn’t is where it doesn't need to be.
-
-== Quality Gate
-== New Code Period
-* Global level
-* Project level
-* Branch level
-
-== Branch analysis
-* Short-lived branches image:short-lived-branch-concept.png[short-lived, role="right"]
-** disappear quickly
-** will be merged rapidly
-** is developed for a given version
-* Long-lived branches image:long-lived-branch-concept.png[long-lived, role="right"]
-* Master/main branch
-== Pull-request analysis
-
-[.note]
-* merged rapidly to prevent integration issues
-* is developed for a given version, so the version does not change, and there is no way to set the New Code period; everything that has been changed in the branch is new code
+[.notes]
+****
+=== Main/Trunk/Master branch
+****
 
 == Demo
-* https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-maven/[SonarScanner for Maven ]
-* https://github.com/emilybache/Roadload-Refactoring-Kata
+https://github.com/emilybache/Email-Sender-Refactoring-Kata[Email Sender Refactoring Kata - Emily Bache]
+
+=== Sonar Server
+https://www.sonarqube.org/downloads/[Sonar Server]
+
+=== Sonar Scanner
+https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-maven/[SonarScanner for Maven]
+
+=== Sonarlint - IntelliJ
+https://www.sonarlint.org/

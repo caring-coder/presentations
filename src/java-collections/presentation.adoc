@@ -12,6 +12,8 @@ include::legacy.adoc[]
 
 include::collection.adoc[]
 
+include::immutable-collection.adoc[]
+
 include::stream.adoc[]
 
 :leveloffset: -1

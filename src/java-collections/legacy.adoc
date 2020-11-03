@@ -76,10 +76,10 @@ Vector --> Enumeration : elements()
 a|[plantuml, align="center"]
 ----
 @startuml
-
 skinparam monochrome reverse
 skinparam handwritten true
 skinparam BackgroundColor transparent
+
 participant User
 create Vector
 User -> Vector: new Vector()
@@ -104,7 +104,6 @@ end note
 Vector -> array: set(elementCount)
 array --> Vector
 Vector --> User
-
 @enduml
 ----
 |===
@@ -236,7 +235,7 @@ class BitSet{
     + void flip(int, int)
     + boolean get(int, int)
     + BitSet get(int, int)
-    ---
+    ----
     + void and(BitSet)
     + void andNot(BitSet)
     + void xor(BitSet)
