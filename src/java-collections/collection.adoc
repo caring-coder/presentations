@@ -67,15 +67,16 @@ digraph G {
 
 == Collection Interface
 
+[cols=3, frame=none, grid=none]
 |===
-| constructor | traverse
 a|
+constructor
 [source, java]
 ----
 Collection()
 Collection(Collection<? extends E> c)
 ----
-a|
+misc
 [source, java]
 ----
 boolean equals(Object o)
@@ -83,27 +84,27 @@ int hashCode()
 Object[] toArray()
 <T> T[] toArray(T[] a)
 ----
-| presence | traverse
 a|
+presence
 [source, java]
 ----
 boolean isEmpty()
 boolean contains(Object o)
 boolean containsAll(Collection<?> c)
 ----
-a|
+traversal
 [source, java]
 ----
 Iterator<E> iterator()
 ----
-| add [Optional, may throw UnsupportedOperationException] |  remove [Optional, may throw UnsupportedOperationException] 
-a|
+a| 
+insertion [Optional, may throw UnsupportedOperationException] 
 [source, java]
 ----
 boolean add(E e)
 boolean addAll(Collection<? extends E> c)
 ----
-a|
+removal [Optional, may throw UnsupportedOperationException]
 [source, java]
 ----
 void clear()
@@ -113,7 +114,7 @@ boolean retainAll(Collection<? extends E> c)
 ----
 |===
 
-== Iterator
+== Utility Interfaces
 
 [plantuml, align="center"]
 ----
@@ -133,6 +134,23 @@ interface Iterator<E>  {
     boolean hasNext()
     E next()
     void remove()
+}
+
+interface Comparable<E>  {
+    int compareTo(E e)
+}
+
+interface Comparator<E>  {
+    int compare(E first, E second)
+    --
+    default Comparator<E> reversed()
+    public static Comparator<E> comparing##(...)
+    default Comparator<E> thenComparing##(...)
+    --
+    public static Comparator<E> nullsFirst(Comparator<E> comparator)
+    public static Comparator<E> nullsLast(Comparator<E> comparator)
+    public static Comparator<E> reverseOrder()
+    public static Comparator<E> naturalOrder()
 }
 @enduml
 ----
@@ -431,17 +449,27 @@ SortedSet <|- NavigableSet
 @enduml
 ----
 
-=== HashSet
+=== Generic Implementations
 
-=== LinkedHashSet
+[cols=5]
+|===
+| Feature | HashSet | LinkedHashSet | TreeSet | EnumSet
+| Keys Order | None | Fixed | Sorted| Sorted
+| add() | O(1) | O(1) | O(log n)| O(1)
+| contains() | O(1) | O(1) | O(log n)| O(1)
+| next() | O(h/n) | O(1) | O(log n)| O(1)
+|===
 
-=== EnumSet
+=== Concurrent Implementations
 
-=== TreeSet
-
-=== ConcurrentSkipListSet
-
-=== CopyOnWriteArraySet
+[cols=3]
+|===
+| Feature | CopyOnWriteArraySet | ConcurrentSkipListSet
+| Keys Order | Fixed | Sorted 
+| add() | O(n) | O(log n) 
+| contains() | O(n) | O(log n) 
+| next() | O(1) | O(1) 
+|===
 
 == Map
 
@@ -480,7 +508,7 @@ ConcurrentNavigableMap --|> ConcurrentMap
 
 AbstractMap ..|> Map
 ConcurrentHashMap ..|> ConcurrentMap
-ConcurrentSkipListMap ..|> NavigableMap
+ConcurrentSkipListMap ..|> ConcurrentNavigableMap
 
 AbstractMap <|-- EnumMap
 AbstractMap <|-- HashMap
@@ -494,21 +522,113 @@ LinkedHashMap --|> HashMap
 @enduml
 ----
 
-=== Map Interface
+=== Map Interfaces
 
-=== HashMap
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
 
-=== LinkedHashMap
+interface Map<K, V>{
+  boolean isEmpty()
+  int size()
 
-=== ConcurrentHashMap
+  boolean containsKey(Object)
+  boolean containsValue(Object)
+  
+  V get(Object)
+  V put(K key, V value)
+  V putAll(Map<K, V> map)
+  V remove(Object)
+  void clear()
 
-=== TreeMap
+  Set<K> keySet()
+  Collection<V> values()
+  Set<Entry<K, V>> entrySet()  
+}
 
-=== EnumMap
+interface SortedMap<K, V>{  
+  K firstKey()
+  K lastKey()
 
-=== WeakHashMap
+  SortedMap<K,V> headMap(K toKey)
+  SortedMap<K, V> subMap(K fromKey, K toKey)
+  SortedMap<K,V> tailMap(K fromKey)
+}
 
-=== IdentityHashMap
+interface NavigableMap<K, V>{
+  NavigableSet<K> navigableKeySet()
+  NavigableSet<K> descendingKeySet()
+  NavigableMap<K,V> descendingMap()
+
+  Map.Entry<K,V> firstEntry()
+  Map.Entry<K,V> pollFirstEntry()
+  Map.Entry<K,V> lastEntry()
+  Map.Entry<K,V> pollLastEntry()
+
+  K/Entry<K,V> ceilingKey/Entry(K key)
+  K/Entry<K,V> floorKey/Entry(K key)
+  K/Entry<K,V> higherKey/Entry(K key)
+  K/Entry<K,V> lowerKey/Entry(K key)
+
+  NavigableMap<K,V> headMap(K toKey, boolean inclusive)
+  NavigableMap<K,V> subMap(K from, boolean inclusive, K to, boolean inclusive)
+  NavigableMap<K,V> tailMap(K from, boolean inclusive)
+}
+
+interface ConcurrentMap<K, V>{
+  V putIfAbsent(K key, V value)
+  boolean remove(Object key, Object value)
+  V replace(K key, V value)
+  boolean replace(K key, V oldValue, V newValue)
+}
+
+Map <|- SortedMap
+Map <|-- ConcurrentMap
+SortedMap <|- NavigableMap
+@enduml
+----
+
+=== Generic Implementations
+
+[cols=5]
+|===
+| Feature       | HashMap | LinkedHashMap | TreeMap  | EnumMap
+| Keys Order    | None    | Fixed         | Sorted   | Sorted
+| get()         | O(1)    | O(1)          | O(log n) | O(1)
+| containsKey() | O(1)    | O(1)          | O(log n) | O(1)
+| next()        | O(h/n)  | O(1)          | O(log n) | O(1)
+|===
+
+=== Concurrent Implementations
+
+[cols=3]
+|===
+| Feature       | ConcurrentHashMap | ConcurrentSkipListMap
+| Keys Order    | None              | Sorted                
+| get()         | O(1)              | O(log n)                 
+| containsKey() | O(1)              | O(log n)                
+| next()        | O(h/n)            | O(1)                 
+|===
+
+=== Specific Implementations
+
+[graphviz, align="center"]
+----
+digraph G{
+    graph[bgcolor=transparent, rankdir=LR]
+    node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+    edge[color=white, fontcolor="white", fontname="Consolas", tailclip=false]    
+
+    WeakHashMap
+    IdentityHashMap
+    LinkedHashMap
+}
+----
 
 == Queue
 
@@ -544,37 +664,169 @@ class SynchronousQueue<E>
 
 === Queue Interface
 
-=== LinkedTransferQueue
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
 
-=== PriorityQueue
+interface Collection<E>{
+  boolean add(E o) //throws
+}
 
-=== ConcurrentLinkedQueue
+interface Queue<E>{
+  boolean offer(E o)
 
-=== Deque Interface
+  E element() //throws
+  E peek()
+  
+  E remove() //throws
+  E poll()
+}
 
-=== ArrayDeque
+interface TransferQueue<E>{  
+  int getWaitingConsumerCount()
+  boolean hasWaitingConsumer()
+  void transfer(E e)
+  boolean tryTransfer(E e)
+  boolean tryTransfer(E e, long timeout, TimeUnit unit)
+}
 
-=== BlockingQueue interface
+interface Deque<K, V>{
+  void addFirst/Last(E e)
+  boolean offerFirst/Last(E e)
+  E peekFirst/Last()
+  E pollFirst/Last()
+  E getFirst/Last()
+  E removeFirst/Last()
+  void push(E e)
+  E pop()
+}
 
-=== ArrayBlockingQueue
+interface BlockingQueue<K, V>{
+  int drainTo(Collection< ? super E> c)
+  int drainTo(Collection < ? super E> c, int maxElements)
+  int remainingCapacity()
+  E take()
+}
 
-=== LinkedBlockingQueue
+interface BlockingDeque<K, V>{
+}
+Collection <|- Queue
+Queue <|-- Deque
+Queue <|- BlockingQueue
+BlockingQueue <|-- TransferQueue
+Deque <|-- BlockingDeque
+BlockingQueue <|-- BlockingDeque
 
-=== PriorityBlockingQueue
+@enduml
+----
 
-=== DelayQueue
+=== Specific Implementations
 
-=== SynchronousQueue
+----
+digraph G{
+    graph[bgcolor=transparent, rankdir=LR]
+    node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+    edge[color=white, fontcolor="white", fontname="Consolas"]    
 
-=== BlockingDeque interface
+    SynchronousQueue
+    Delayed
+    BlockingQueue [color=gray, fontcolor=grey]
+    SynchronousQueue -> BlockingQueue
+    DelayQueue -> BlockingQueue  [color=gray]
+    DelayQueue -> Delayed  [color=gray, style=dotted]
+}
+----
 
-=== LinkedBlockingDeque
+=== Specific Implementations
 
-== Sorting
+[graphviz, align="center"]
+----
+digraph G{
+    graph[bgcolor=transparent, rankdir=LR]
+    node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+    edge[color=white, fontcolor="white", fontname="Consolas"]    
 
-=== Comparable
-
-=== Comparator
+    "Array based"
+    "Link-based"
+    "Priority based"
+}
+----
 
 == Collections Algorithms
+
+[cols=5, frame=none, grid=none]
+|===
+a|
+[source, java]
+----
+sort
+binarySearch
+reverse
+reverseOrder
+----
+a|
+[source, java]
+----
+shuffle
+swap
+rotate
+----
+a|
+[source, java]
+----
+fill
+copy
+----
+a|
+[source, java]
+----
+replaceAll
+----
+a|
+[source, java]
+----
+min
+max
+----
+a|
+[source, java]
+----
+indexOfSubList
+lastIndexOfSubList
+----
+a|
+[source, java]
+----
+unmodifiable__
+synchronized__
+checked__
+----
+a|
+[source, java]
+----
+empty__
+singleton__
+nCopies
+----
+a|
+[source, java]
+----
+enumeration
+list
+----
+a|
+[source, java]
+----
+frequency
+disjoint
+addAll
+newSetFromMap
+asLifoQueue
+----
+|===
 

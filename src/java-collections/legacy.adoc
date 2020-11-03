@@ -210,10 +210,10 @@ System.out.println(ClassLayout.parseInstance(bits).toPrintable());
 ----
 [Z object internals:
  OFFSET  SIZE      TYPE DESCRIPTION            VALUE
-      0     4           (object header)        01 00 00 00 (00000001 00000000 00000000 00000000) (1)
-      4     4           (object header)        00 00 00 00 (00000000 00000000 00000000 00000000) (0)
-      8     4           (object header)        7b 12 07 00 (01111011 00010010 00000111 00000000) (463483)
-     12     4           (object header)        00 04 00 00 (00000000 00000100 00000000 00000000) (1024)
+      0     4           (object header)        01 00 00 00 (...) (1)
+      4     4           (object header)        00 00 00 00 (...) (0)
+      8     4           (object header)        7b 12 07 00 (...) (463483)
+     12     4           (object header)        00 04 00 00 (...) (1024)
      16  1024   boolean [Z.                    N/A
 Instance size: 1040 bytes
 ----
