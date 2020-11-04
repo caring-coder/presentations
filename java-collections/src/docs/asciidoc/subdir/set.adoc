@@ -1,0 +1,128 @@
+= Set
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface Set<E>
+interface SortedSet<E>
+interface NavigableSet<E>
+
+abstract AbstractSet<E>
+abstract EnumSet<E>
+
+class HashSet<E> #grey 
+class LinkedHashSet<E> #grey
+class TreeSet<E> #grey
+class CopyOnWriteArraySet<E> #grey
+class ConcurrentSkipListSet<E>
+
+SortedSet --|> Set
+NavigableSet --|> SortedSet
+
+AbstractSet ..|> Set
+HashSet ..|> Set
+LinkedHashSet ..|> Set
+TreeSet ..|> NavigableSet
+ConcurrentSkipListSet ..|> NavigableSet
+
+EnumSet --|> AbstractSet
+HashSet --|> AbstractSet
+CopyOnWriteArraySet --|> AbstractSet
+TreeSet --|> AbstractSet
+ConcurrentSkipListSet --|> AbstractSet
+
+LinkedHashSet --|> HashSet
+@enduml
+----
+
+== Set Interfaces
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface Collection<E>{
+  boolean isEmpty()
+  boolean contains(Object o)
+  boolean containsAll(Collection<?> c)
+  
+  boolean add(E e)
+  boolean addAll(Collection<? extends E> c)
+  
+  void clear()
+  boolean remove(Object o)
+  boolean removeAll(Collection<? extends E> c)
+  boolean retainAll(Collection<? extends E> c)
+}
+
+interface Set<E>
+
+interface SortedSet<E>{
+  E first()
+  E last()
+  SortedSet headSet(E toElement)
+  SortedSet tailSet(E fromElement)
+  SortedSet subSet(E fromElement, E toElement)
+  Comparator<? super E> comparator()
+}
+
+interface NavigableSet<E>{
+  E ceiling(E e)
+  E floor(E e)
+  E higher(E e)
+  E lower(E e)
+
+  E pollFirst()
+  E pollLast()
+  
+  NavigableSet<E> headSet(E toElement, boolean inclusive)
+  NavigableSet<E> tailSet(E fromElement, boolean inclusive)
+
+  NavigableSet<E> subSet(E from, boolean inclusive, E to, boolean inclusive)
+
+  Iterator<E> descendingIterator()
+  NavigableSet<E> descendingSet()
+}
+
+Collection <|- Set
+Set <|- SortedSet
+SortedSet <|- NavigableSet
+@enduml
+----
+
+== Generic Implementations
+
+[%autowidth.stretch]
+[cols=5*^.^, frame=none, grid=none]
+|===
+>| Feature    | HashSet | LHashSet | TreeSet  | EnumSet
+
+>| Order      | None    | Fixed         | Sorted   | Sorted
+>| add()      | O(1)    | O(1)          | O(log n) | O(1)
+>| contains() | O(1)    | O(1)          | O(log n) | O(1)
+>| next()     | O(h/n)  | O(1)          | O(log n) | O(1)
+|===
+
+== Threadsafe Implementations
+
+[%autowidth.stretch]
+[cols=3*^.^, frame=none, grid=none]
+|===
+>| Feature    | CopyOnWriteArraySet | ConcurrentSkipListSet
+
+>| Order      | Fixed               | Sorted 
+>| add()      | O(n)                | O(log n) 
+>| contains() | O(n)                | O(log n) 
+>| next()     | O(1)                | O(1) 
+|===

@@ -1,7 +1,7 @@
 = Analyser la qualité de son code avec SonarQube
 Joseph Verron <joseph.verron@softeam.fr>
 :toc:
-:imagesdir: assets/images
+:imagesdir: images
 :source-highlighter: highlightjs
 
 [%notitle]

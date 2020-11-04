@@ -1,0 +1,190 @@
+= List
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface List<E>
+interface RandomAccess
+abstract AbstractList<E>
+abstract AbstractSequentialList<E>
+class LinkedList<E> #grey 
+class ArrayList<E> #grey
+class Arrays.asList<E> #grey
+class CopyOnWriteArrayList<E> #grey
+class SubList<E>
+class RandomAccessSubList<E>
+
+AbstractSequentialList --|> AbstractList
+LinkedList --|> AbstractSequentialList
+ArrayList --|> AbstractList
+CopyOnWriteArrayList ..|> List
+CopyOnWriteArrayList ..|> RandomAccess
+ArrayList ..|> RandomAccess
+SubList --|> AbstractList
+RandomAccessSubList ..|> RandomAccess
+RandomAccessSubList --|> SubList
+Arrays.asList ..|> RandomAccess
+Arrays.asList ..|> AbstractList
+@enduml
+----
+
+== List Interface
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface List<E>{
+  void add(int index, E e)
+  boolean addAll(int index, Collection<? extends E> c)
+  --
+  int indexOf(Object o)
+  int lastIndexOf(Object o)
+  E get(int index)
+  E set(int index, E e)
+  E remove(int index)
+  --
+  ListIterator<E> listIterator()
+  ListIterator<E> listIterator(int indx)
+  --
+  List<E> subList(int fromIndex, int toIndex)
+}
+
+interface ListIterator<E> {
+  boolean hasNext() // from Iterator<E>
+  E next() // from Iterator<E>
+  int nextIndex()
+  --
+  void set(E e)
+  void add(E e)
+  void remove() // from Iterator<E>
+  --
+  boolean hasPrevious()
+  E previous()
+  int previousIndex()  
+}
+@enduml
+----
+
+== ArrayList
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+
+participant User
+create ArrayList
+User -> ArrayList: new ArrayList()
+create array
+ArrayList -> array: new Object[10]
+array --> ArrayList
+ArrayList --> User
+
+loop 10times
+    User -> ArrayList: add(Object)
+    ArrayList -> array: set(elementCount)
+    array --> ArrayList
+    ArrayList --> User
+end
+
+User -> ArrayList: add(Object)
+note over ArrayList, array
+    copy the  content of array into 
+    another array twice the size
+end note
+
+ArrayList -> array: set(elementCount)
+array --> ArrayList
+ArrayList --> User
+@enduml
+----
+
+== LinkedList
+
+[cols=2, frame=none, grid=none]
+|===
+a|[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface LinkedList<E>{
+  void addFirst(E e)
+  E getFirst()
+  E removeFirst()
+  --
+  void addLast(E e)
+  E getLast()
+  E removeLast()
+}
+
+LinkedList ..\|> List
+LinkedList ..\|> Deque
+@enduml
+----
+a|[graphviz, align="center"]
+----
+digraph G{
+    graph[bgcolor=transparent, rankdir=LR]
+    node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+    edge[color=white, fontcolor="white", fontname="Consolas", tailclip=false]    
+
+    item0 [label="<v>0\|<p>"]
+    item1 [label="<v>1\|<p>"]
+    item2 [label="<v>2\|<p>"]
+    null [shape=none]
+
+    item0:p:c -> item1:v
+    item1:p:c -> item2:v
+    item2:p:c -> null
+}
+----
+|===
+
+== CopyOnWriteArrayList
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+class CopyOnWriteArrayList<E>{
+  boolean addIfAbsent(int index, E e)
+  int addAllAbsent(Collection< ? extends E>)
+}
+@enduml
+----
+
+== Arrays.asList
+
+[source, java]
+----
+class Application {
+  public static void main(String[] args){
+    Arrays.asList(1, 2, 3 ,4);
+    List.of(1,2,3,4);
+  }
+}
+----

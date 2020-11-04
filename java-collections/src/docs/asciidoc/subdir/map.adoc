@@ -1,0 +1,160 @@
+= Map
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface Map<K, V>
+interface SortedMap<K, V>
+interface NavigableMap<K, V>
+abstract AbstractMap<K, V>
+
+interface ConcurrentMap<K, V>
+interface ConcurrentNavigableMap<K, V>
+
+class ConcurrentHashMap<K, V>
+class ConcurrentSkipListMap<K, V>
+
+class EnumMap<K, V>
+class HashMap<K, V>
+class LinkedHashMap<K, V>
+class IdentityHashMap<K, V>
+class WeakHashMap<E>
+class TreeMap<E>
+
+SortedMap --|> Map
+NavigableMap --|> SortedMap
+ConcurrentMap --|> Map
+ConcurrentNavigableMap --|> NavigableMap
+ConcurrentNavigableMap --|> ConcurrentMap
+
+AbstractMap ..|> Map
+ConcurrentHashMap ..|> ConcurrentMap
+ConcurrentSkipListMap ..|> ConcurrentNavigableMap
+
+AbstractMap <|-- EnumMap
+AbstractMap <|-- HashMap
+AbstractMap <|-- IdentityHashMap
+WeakHashMap --|> AbstractMap
+TreeMap --|> AbstractMap
+ConcurrentHashMap --|> AbstractMap
+ConcurrentSkipListMap --|> AbstractMap
+
+LinkedHashMap --|> HashMap
+@enduml
+----
+
+== Map Interfaces
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface Map<K, V>{
+  boolean isEmpty()
+  int size()
+
+  boolean containsKey(Object)
+  boolean containsValue(Object)
+  
+  V get(Object)
+  V put(K key, V value)
+  V putAll(Map<K, V> map)
+  V remove(Object)
+  void clear()
+
+  Set<K> keySet()
+  Collection<V> values()
+  Set<Entry<K, V>> entrySet()  
+}
+
+interface SortedMap<K, V>{  
+  K firstKey()
+  K lastKey()
+
+  SortedMap<K,V> headMap(K toKey)
+  SortedMap<K, V> subMap(K fromKey, K toKey)
+  SortedMap<K,V> tailMap(K fromKey)
+}
+
+interface NavigableMap<K, V>{
+  NavigableSet<K> navigableKeySet()
+  NavigableSet<K> descendingKeySet()
+  NavigableMap<K,V> descendingMap()
+
+  Map.Entry<K,V> firstEntry()
+  Map.Entry<K,V> pollFirstEntry()
+  Map.Entry<K,V> lastEntry()
+  Map.Entry<K,V> pollLastEntry()
+
+  K/Entry<K,V> ceilingKey/Entry(K key)
+  K/Entry<K,V> floorKey/Entry(K key)
+  K/Entry<K,V> higherKey/Entry(K key)
+  K/Entry<K,V> lowerKey/Entry(K key)
+
+  NavigableMap<K,V> headMap(K toKey, boolean inclusive)
+  NavigableMap<K,V> subMap(K from, boolean inclusive, K to, boolean inclusive)
+  NavigableMap<K,V> tailMap(K from, boolean inclusive)
+}
+
+interface ConcurrentMap<K, V>{
+  V putIfAbsent(K key, V value)
+  boolean remove(Object key, Object value)
+  V replace(K key, V value)
+  boolean replace(K key, V oldValue, V newValue)
+}
+
+Map <|- SortedMap
+Map <|-- ConcurrentMap
+SortedMap <|- NavigableMap
+@enduml
+----
+
+== Generic Implementations
+
+[%autowidth.stretch]
+[cols=5*^.^, frame=none, grid=none]
+|===
+>| Feature       | HashMap | LHashMap | TreeMap  | EnumMap
+>| Keys Order    | None    | Fixed         | Sorted   | Sorted
+>| get()         | O(1)    | O(1)          | O(log n) | O(1)
+>| contains() | O(1)    | O(1)          | O(log n) | O(1)
+>| next()        | O(h/n)  | O(1)          | O(log n) | O(1)
+|===
+
+== Threadsafe Implementations
+
+[%autowidth.stretch]
+[cols=3*^.^, frame=none, grid=none]
+|===
+>| Feature       | ConcurrentHashMap | ConcurrentSkipListMap
+>| Keys Order    | None              | Sorted                
+>| get()         | O(1)              | O(log n)                 
+>| contains() | O(1)              | O(log n)                
+>| next()        | O(h/n)            | O(1)                 
+|===
+
+== Specific Implementations
+
+[graphviz, align="center"]
+----
+digraph G{
+    graph[bgcolor=transparent, rankdir=LR]
+    node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+    edge[color=white, fontcolor="white", fontname="Consolas", tailclip=false]    
+
+    WeakHashMap
+    IdentityHashMap
+    LinkedHashMap
+}
+----

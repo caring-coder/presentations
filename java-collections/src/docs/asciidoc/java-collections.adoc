@@ -1,0 +1,22 @@
+= Collections en Java
+Joseph Verron <joseph@verron.pro>
+:toc:
+:source-highlighter: highlightjs
+
+:leveloffset: +1
+
+include::subdir/array.adoc[]
+
+include::subdir/legacy.adoc[]
+
+include::subdir/collection.adoc[]
+
+include::subdir/list.adoc[]
+
+include::subdir/set.adoc[]
+
+include::subdir/map.adoc[]
+
+include::subdir/queue.adoc[]
+
+:leveloffset: -1

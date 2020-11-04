@@ -50,28 +50,6 @@ class Application{
 }
 ----
 
-== Utilitaires
-
-[source, java]
-----
-class Application{
-  public static void main(String[] args){
-    String[] boyNames = {"Camille","Lucas","Enzo"};
-    String[] girlNames = {"Camille","Léa","Chloé"};
-    
-    Arrays.equals(boyNames, girlNames);
-    Arrays.hashCode(girlNames);
-    Arrays.toString(boyNames);
-    
-    double[][] polygonA = {{0.0, 0.0}, {0.0, 1.0}, {2.0, 0.0}};
-    double[][] polygonB = {{0.0, 0.0}, {0.0, 1.0}, {2.0, 0.0}};
-    Arrays.deepEquals(polygonA, polygonB);
-    Arrays.deepHashCode(polygonB);
-    Arrays.deepToString(polygonA);
-  }
-}
-----
-
 == Utilitaires 1/2
 
 [source, java]

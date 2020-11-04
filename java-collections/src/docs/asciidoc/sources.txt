@@ -1,0 +1,5 @@
+Oracle Guide to The Collections Framework 
+https://docs.oracle.com/javase/8/docs/technotes/guides/collections/
+
+Développons en Java de Jean-Michel DOUDOUX 
+https://www.jmdoudoux.fr/java/dej/

@@ -1,0 +1,147 @@
+= Queue
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface Queue<E>
+interface Deque<E>
+interface BlockingQueue<E>
+interface BlockingDeque<E>
+interface TransferQueue<E>
+
+abstract AbstractQueue<E>
+
+class ArrayDeque<E>
+class ConcurrentLinkedQueue<E>
+class PriorityBlockingQueue<E>
+class PriorityQueue<E>
+class Array_LinkedBlockingQueue<E>
+class LinkedTransferQueue<E>
+class DelayQueue<E>
+class SynchronousQueue<E>
+
+Deque                 --|> Queue
+BlockingQueue         --|> Queue
+BlockingDeque         --|> Deque
+BlockingDeque         --|> BlockingQueue
+TransferQueue         --|> BlockingQueue
+        
+LinkedTransferQueue   .|> TransferQueue 
+ArrayDeque            .|> Deque                 
+AbstractQueue         .|> Queue               
+        
+SynchronousQueue      .|> BlockingQueue     
+DelayQueue            .|> BlockingQueue    
+BlockingQueue <|..  Array_LinkedBlockingQueue    
+PriorityBlockingQueue .|> BlockingQueue    
+        
+SynchronousQueue      --|> AbstractQueue
+Array_LinkedBlockingQueue   --|> AbstractQueue
+DelayQueue            --|> AbstractQueue
+PriorityQueue         --|> AbstractQueue
+PriorityBlockingQueue --|> AbstractQueue
+ConcurrentLinkedQueue --|> AbstractQueue
+
+@enduml
+----
+
+== Queue Interface
+
+[plantuml, align="center"]
+----
+@startuml
+skinparam monochrome reverse
+skinparam handwritten true
+skinparam BackgroundColor transparent
+skinparam genericDisplay old
+set namespaceSeparator none
+
+interface Collection<E>{
+  boolean add(E o) //throws
+}
+
+interface Queue<E>{
+  boolean offer(E o)
+
+  E element() //throws
+  E peek()
+  
+  E remove() //throws
+  E poll()
+}
+
+interface TransferQueue<E>{  
+  int getWaitingConsumerCount()
+  boolean hasWaitingConsumer()
+  void transfer(E e)
+  boolean tryTransfer(E e)
+  boolean tryTransfer(E e, long timeout, TimeUnit unit)
+}
+
+interface Deque<K, V>{
+  void addFirst/Last(E e)
+  boolean offerFirst/Last(E e)
+  E peekFirst/Last()
+  E pollFirst/Last()
+  E getFirst/Last()
+  E removeFirst/Last()
+  void push(E e)
+  E pop()
+}
+
+interface BlockingQueue<K, V>{
+  int drainTo(Collection< ? super E> c)
+  int drainTo(Collection < ? super E> c, int maxElements)
+  int remainingCapacity()
+  E take()
+}
+
+interface BlockingDeque<K, V>{
+}
+Collection <|- Queue
+Queue <|-- Deque
+Queue <|- BlockingQueue
+BlockingQueue <|-- TransferQueue
+Deque <|-- BlockingDeque
+BlockingQueue <|-- BlockingDeque
+
+@enduml
+----
+== Generic Implementations
+
+[graphviz, align="center"]
+----
+digraph G{
+    graph[bgcolor=transparent, rankdir=LR]
+    node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+    edge[color=white, fontcolor="white", fontname="Consolas"]    
+
+    "Array based"
+    "Link-based"
+    "Priority based"
+}
+----
+
+== Specific Implementations
+
+[graphviz, align="center"]
+----
+digraph G{
+    graph[bgcolor=transparent, rankdir=LR]
+    node[shape=record, color=white, fontcolor=white, fontname="Consolas"]
+    edge[color=white, fontcolor="white", fontname="Consolas"]    
+
+    SynchronousQueue
+    Delayed
+    BlockingQueue [color=gray, fontcolor=grey]
+    SynchronousQueue -> BlockingQueue
+    DelayQueue -> BlockingQueue  [color=gray]
+    DelayQueue -> Delayed  [color=gray, style=dotted]
+}
+----
