@@ -188,24 +188,43 @@ Sinon Info
 * [Optional] Static analysis of compiled code
 
 === Short-lived branches
-image::short-lived-branch-concept.png[short-lived]
+[svgbob]
+----
+     5.6   6.0               6.1
+ - - - *---->*---------------->* - - - master
+        \ 
+         \
+ - - - -  '*--->*--->*--->*--->* - - - branch-5.6 
+            \       /
+             \     /
+ - - - - - -  '*-*' - - - - - - - security-fix-1254
+----
+
 * de courte durée
 * rapidement mergée dans une branche parent
 * ne correspond qu'à une version
 
 [.notes]
 ****
-=== Pull/Merge request branches
+Pull/Merge request branches
 ****
 
 === Long-lived branches
-image::long-lived-branch-concept.png[long-lived]
+
+[svgbob]
+----
+      5.6   6.0              6.1
+ - - - *---->*---------------->* - - - master
+        \  
+         \   5.6.1
+ - - - -  '*--->*--->*--->*--->* - - - branch-5.6  
+----
 * représente une divergence d'avec la branche de référence
-* peut exister pour suivre plusieurs version de l'application
+* peut exister pour suivre plusieurs versions de l'application
 
 [.notes]
 ****
-=== Main/Trunk/Master branch
+Main/Trunk/Master branch
 ****
 
 == Demo
