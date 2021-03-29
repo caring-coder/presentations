@@ -1,0 +1,54 @@
+.WHITE {
+    color: #FFFFFF;
+    text-shadow: 4px 4px 4px #787878;
+}
+
+.BLACK {
+    color: #000000;
+    text-shadow: 4px 4px 4px #787878;
+}
+
+.GOLD {
+    color: #C2A227;
+    text-shadow: 4px 4px 4px #787878;
+}
+
+.SILVER {
+    color: #C0C0C0;
+    text-shadow: 4px 4px 4px #787878;
+}
+
+.GREY {
+    color: #808080;
+    text-shadow: 4px 4px 4px #787878;
+}
+
+.DARKRED {
+    color: #5f0000;
+    text-shadow: 4px 4px 4px #787878;
+}
+
+.RED {
+    color: #ff0000;
+    text-shadow: 4px 4px 4px #787878;
+}
+
+.ORANGE {
+    color: #ff8800;
+    text-shadow: 4px 4px 4px #787878;
+}
+
+.YELLOW {
+    color: #eeff00;
+    text-shadow: 4px 4px 4px #787878;
+}
+
+.GREEN {
+    color: #33ff00;
+    text-shadow: 4px 4px 4px #787878;
+}
+
+.BLUE {
+    color: #0077ff;
+    text-shadow: 4px 4px 4px #787878;
+}

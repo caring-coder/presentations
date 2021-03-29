@@ -1,0 +1,288 @@
+= Analyser la qualité de son code avec SonarQube
+Joseph Verron <joseph.verron@softeam.fr>
+v1.1, March 30, 2021: TDF update
+:description: https://github.com/josephverron/presentations/tree/master/sonarqube
+:toc:
+:imagesdir: images
+:source-highlighter: highlightjs
+
+[%notitle]
+== Only Valid Code Quality Measurement
+
+image::wtfs_per_minute_thumb.jpg[wtf-per-minute, height=560]
+
+== Analyse de programme
+
+=== Dynamique
+[%step]
+* tests unitaires
+* fuzzer
+* profileur exact, statistique, de latence
+* analyse de teinte
+* débogueur
+* analyse energétique
+
+[.notes]
+****
+* Fuzzer -> input aléatoire pour tester un range de valeurs
+* Profileur exact -> ralenti l'exécution
+* Profileur statistique (sampling profiler) -> profile de temps en temps
+* Profileur de latence -> l'attente pendant les interactions avec GUI
+* Analyse de teinte -> mesure de la propagation d'une donnée dans une ou plusieurs applications
+****
+
+=== Méthodes Formelles
+[%step]
+* typage
+* model-checking
+* *interprétation abstraite*
+* vérification déductive
+
+[.notes]
+****
+* typage -> restriction des classes de programmes possibles
+* model-checking -> analyse exhaustive de l'évolution du programme
+* interprétation abstraite -> analyse d'un sur-ensemble des états possibles
+* vérification déductive -> méthode où l'on démontre la complétude et la correction sémantique des éléments du programme
+
+Alonzo Church, Kurt Gödel et Alan Turing, dans les années 1930 démontrent avec le problème de l'arrêt et le théorème de Rice que l’analyse de programmes n'est pas déterministe.
+Il n’existe aucune méthode « mécanique » qui peut toujours dire sans se tromper au vu d’un programme si celui-ci va ou non produire des erreurs à l’exécution.
+****
+
+=== Revue de code
+[%step]
+* Inspection formelle
+* Revue des changements
+* Revue par dessus l'épaule
+* Binômage
+* *Revue automatisée*
+
+[.notes]
+****
+* Inspection formelle -> efficace mais lourd
+* Revue des changements -> diff reviews, pull/merge request
+* Revue par dessus l'épaule -> explication du developpeur à un collègue, en général sur son poste
+* Binômage -> Developpement à deux sur la même machine
+****
+
+== Automatisation de la revue de code
+
+=== Limitations
+* Ne comprends pas l'intention du développeur
+* Tout n'est pas automatisable
+* Faux positifs et faux négatifs
+
+[%notitle]
+=== Limitations - Exemple
+[source, java]
+--
+public class MathUtils{
+    public int divide(boolean entry){
+        int x;
+        if(entry){ x = 0; }
+        else { x = 5; }
+        return 10/x;
+    }
+}
+--
+
+=== Avantages
+* Rapidité
+* Exhaustivité
+* Précision
+
+[.notes]
+****
+* Rapidité -> temps ridiculement court comparé à une revue humaine
+* Exhaustivité -> l'intégralité du code peut être analysée
+* Précision -> erreurs trouvé à des lignes de code précise
+****
+
+== SonarQube
+
+https://docs.sonarqube.org/latest/[Latest Documentation]
+
+[.stretch]
+image::sonarqube-icon.svg[sonarqube-logo]
+
+=== Concepts
+[%step]
+* Metric:	Type de mesure, qualitative ou quantitative
+* Measure:	Valeur d'une métrique sur un fichier ou un projet à un instant T
+* Rule:	Un standard ou une pratique à suivre.
+
+=== Issue
+Violation de règle à un instant T
+[%step]
+* Bug: Une erreur dans le code
+* Code Smell:	Un problème de maintenance probable dans le code.
+* Vulnerability:	Un problème de sécurité.
+* Security Hotspot:	Avertissement lié à la sécurité d'une librairie
+
+=== Spécificités
+[%step]
+* Quality Profile:	Ensembles de règles.
+* Snapshot:	Ensemble de mesures et violations d'un profil qualité à un instant T, généré à chaque analyse
+* Remediation Cost:	Temps estimé pour réparer les Vulnerability and Reliability Issues.
+* Technical Debt:	Temps estimé pour réparer les Maintainability Issues / code smells
+
+=== Water Leak
+
+image:water-leak2.jpg[water-leak, height=560]
+
+[.notes]
+****
+* New Code Period
+** Global level
+** Project level
+** Branch level
+****
+
+=== Quality Gate
+Is it Releasable ?
+
+[level-ok]#passing#
+
+[level-warn]#warning#
+
+[level-error]#failure#
+
+== Règles
+* Language, Default Severity, Tag, Available Since, Template
+* Repository: engine/analyzer qui implémente la règle
+* Status: Beta, Deprecated, Ready
+* Quality Profile & Severity
+
+=== Types
+* Code erroné ou probablement erroné -> Bug rule.
+* Code exploitable par un hacker -> Vulnerability rule.
+* Relatif à la securité, à reviser manuellement -> Security Hotspot rule.
+* Sinon -> Code Smell rule.
+
+=== Severités
+What's the worst thing that could happen, and how likely will it happens ?
+|===
+|            | Très Probable        | Peu Probable
+| Très Grave | [rating-E]#E# Bloquant | [rating-D]#D# Critique
+| Peu Grave  | [rating-C]#C# Majeur   | [rating-B]#B# Mineur
+|===
+Sinon Info
+
+[.notes]
+****
+* Bugs
+** Impact: Could the Worst Thing cause the application to crash or to corrupt stored data?
+** Likelihood: What's the probability that the Worst Thing will happen?
+* Vulnerabilities
+** Impact: Could the exploitation of the Worst Thing result in significant damage to your assets or your users?
+** Likelihood: What is the probability that a hacker will be able to exploit the Worst Thing?
+****
+
+== Analyse dans SonarQube
+* Blame data importation
+* Static analysis of source code
+* [Optional] Static analysis of compiled code
+
+=== Short-lived branches
+
+[graphviz]
+----
+digraph G {
+    rankdir=LR;
+    node [shape=circle, style=filled, width=0.2, fixedsize=true, label=""]
+
+    subgraph cluster_1 {
+        label = "develop"
+        style=dotted
+        color=grey
+
+        c1
+        c1
+        c2
+        c3
+        c4
+        c5
+        c0 -> c1 -> c2 -> c3 -> c4 -> c5
+    }
+    
+    subgraph cluster_2 {
+        label = "feature branch"
+        style=dotted
+        color=grey
+        s1
+        c1 -> s1 -> c3
+    }
+
+}
+----
+
+* de courte durée
+* rapidement mergée dans une branche parent
+* ne correspond qu'à une version
+
+[.notes]
+****
+Pull/Merge request branches
+Feture branches
+Security fixes
+****
+
+=== Long-lived branches
+
+[graphviz]
+----
+digraph G {
+    rankdir=LR;
+    node [shape=circle, style=filled, width=0.2, fixedsize=true, label=""]
+    
+    subgraph cluster_0 {
+        label = "main"
+        style=dotted
+        color=grey
+        m1
+        m2
+        m3
+        m1 -> m2 -> m3
+    }
+
+    subgraph cluster_1 {
+        label = "release 5.6"
+        style=dotted
+        color=grey
+        c1
+        c2
+        c3
+        c4
+        c5
+        m1 -> c1 -> c2 -> c3 -> c4 -> c5
+    }
+
+}
+----
+
+* représente une divergence d'avec la branche de référence
+* peut exister pour suivre plusieurs versions de l'application
+
+
+[.notes]
+****
+Main/Trunk/Master branch
+Release Branch
+****
+
+== Demo
+https://github.com/emilybache/Email-Sender-Refactoring-Kata[Email Sender Refactoring Kata - Emily Bache]
+
+=== Sonar Server
+https://www.sonarqube.org/downloads/[Sonar Server]
+
+=== Sonar Scanner
+https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-maven/[SonarScanner for Maven]
+
+=== Sonarlint
+https://www.sonarlint.org/
+
+https://www.sonarlint.org/eclipse/[4 Eclipse]
+https://www.sonarlint.org/intellij/[4 IntelliJ]
+https://www.sonarlint.org/visualstudio/[4 Visual Studio]
+https://www.sonarlint.org/vscode/[4 VS Code]
