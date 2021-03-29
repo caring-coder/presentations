@@ -12,3 +12,5 @@ https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
 https://docs.sonarqube.org/latest/user-guide/issues/
 
 https://wiki.sei.cmu.edu/confluence/display/java/Rule+AA.+References
+
+https://www.youtube.com/watch?v=bNO3LcQaGyg[ParisJUG 2020/10/22 - Soirée Virtuelle : SonarQube & Sécurité]
