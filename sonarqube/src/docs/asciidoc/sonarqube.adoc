@@ -1,5 +1,7 @@
 = Analyser la qualité de son code avec SonarQube
 Joseph Verron <joseph.verron@softeam.fr>
+v1.1, March 30, 2021: TDF update
+:description: https://github.com/josephverron/presentations/tree/master/sonarqube
 :toc:
 :imagesdir: images
 :source-highlighter: highlightjs
@@ -96,10 +98,6 @@ public class MathUtils{
 * Précision -> erreurs trouvé à des lignes de code précise
 ****
 
-[%notitle]
-=== Avantages - Exemple
-https://www.sonarqube.org/[Latest Documentation]
-
 == SonarQube
 
 https://docs.sonarqube.org/latest/[Latest Documentation]
@@ -149,8 +147,6 @@ Is it Releasable ?
 
 [level-error]#failure#
 
-
-
 == Règles
 * Language, Default Severity, Tag, Available Since, Template
 * Repository: engine/analyzer qui implémente la règle
@@ -188,16 +184,36 @@ Sinon Info
 * [Optional] Static analysis of compiled code
 
 === Short-lived branches
-[svgbob]
+
+[graphviz]
 ----
-     5.6   6.0               6.1
- - - - *---->*---------------->* - - - master
-        \ 
-         \
- - - - -  '*--->*--->*--->*--->* - - - branch-5.6 
-            \       /
-             \     /
- - - - - - -  '*-*' - - - - - - - security-fix-1254
+digraph G {
+    rankdir=LR;
+    node [shape=circle, style=filled, width=0.2, fixedsize=true, label=""]
+
+    subgraph cluster_1 {
+        label = "develop"
+        style=dotted
+        color=grey
+
+        c1
+        c1
+        c2
+        c3
+        c4
+        c5
+        c0 -> c1 -> c2 -> c3 -> c4 -> c5
+    }
+    
+    subgraph cluster_2 {
+        label = "feature branch"
+        style=dotted
+        color=grey
+        s1
+        c1 -> s1 -> c3
+    }
+
+}
 ----
 
 * de courte durée
@@ -211,16 +227,40 @@ Pull/Merge request branches
 
 === Long-lived branches
 
-[svgbob]
+[graphviz]
 ----
-      5.6   6.0              6.1
- - - - *---->*---------------->* - - - master
-        \  
-         \   5.6.1
- - - - -  '*--->*--->*--->*--->* - - - branch-5.6  
+digraph G {
+    rankdir=LR;
+    node [shape=circle, style=filled, width=0.2, fixedsize=true, label=""]
+    
+    subgraph cluster_0 {
+        label = "main"
+        style=dotted
+        color=grey
+        m1
+        m2
+        m3
+        m1 -> m2 -> m3
+    }
+
+    subgraph cluster_1 {
+        label = "release 5.6"
+        style=dotted
+        color=grey
+        c1
+        c2
+        c3
+        c4
+        c5
+        m1 -> c1 -> c2 -> c3 -> c4 -> c5
+    }
+
+}
 ----
+
 * représente une divergence d'avec la branche de référence
 * peut exister pour suivre plusieurs versions de l'application
+
 
 [.notes]
 ****

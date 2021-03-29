@@ -1,7 +1,10 @@
-= Collections en Java
+= Java Collections: From Arrays to LinkedTranferQueues
 Joseph Verron <joseph@verron.pro>
-:toc:
+v1.0, October 3, 2020: First incarnation
+:description: https://github.com/josephverron/presentations/tree/master/java-collections
 :source-highlighter: highlightjs
+
+:toc:
 
 :leveloffset: +1
 
@@ -18,5 +21,7 @@ include::subdir/set.adoc[]
 include::subdir/map.adoc[]
 
 include::subdir/queue.adoc[]
+
+include::subdir/stream.adoc[]
 
 :leveloffset: -1
