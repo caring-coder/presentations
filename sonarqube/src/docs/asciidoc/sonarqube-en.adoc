@@ -1,6 +1,6 @@
 = Basics of Code Quality Analysis with SonarQube
 Joseph Verron <joseph.verron@softeam.fr>
-v1.1, March 30, 2021: TDF update
+v1.2, April 1st, 2021: TDF update
 :description: https://github.com/josephverron/presentations/tree/master/sonarqube
 :toc:
 :imagesdir: images
@@ -10,31 +10,45 @@ v1.1, March 30, 2021: TDF update
 [%notitle]
 == Only Valid Code Quality Measurement
 
-image::wtfs_per_minute_thumb.jpg[wtf-per-minute, height=560]
+image::wtfs_per_minute_thumb.jpg[wtf-per-minute, height=560, class=plain]
 
-== Analyse de programme
+== Sonarqube
+https://docs.sonarqube.org/latest/[Latest Documentation]
 
-=== Dynamique
+[.stretch]
+image::sonarqube-icon.svg[sonarqube-logo]
+
+== Program Analysis
+
+=== Dynamic
 [%step]
-* unit tests
+* tests (automated or not)
 * fuzzer
-* profiling exact, sample, latency
+* profiler
+* sampling profiler
 * taint analysis
 * debugging
-* energetic
 
 [.notes]
 ****
-* Fuzzer -> input aléatoire pour tester un range de valeurs
-* Profileur exact -> ralenti l'exécution
-* Profileur statistique (sampling profiler) -> profile de temps en temps
-* Profileur de latence -> l'attente pendant les interactions avec GUI
-* Analyse de teinte -> mesure de la propagation d'une donnée dans une ou plusieurs applications
-*
-* Energy consumption testing
+Fuzzer -> random input testing a range of values
+
+Exact profiler -> slow down execution
+
+Sampling profiler -> regular snap of stack states
+
+Latency profiler -> l'attente pendant les interactions avec GUI
+
+Taint analysis -> watch how data propagate in one or more system
+
+---
+
+Energy consumption testing
+
+Latency profilers for interfaces (graphical or not) response times
 ****
 
-=== Méthodes Formelles
+=== Formal
 [%step]
 * type system
 * model-checking
@@ -43,16 +57,17 @@ image::wtfs_per_minute_thumb.jpg[wtf-per-minute, height=560]
 
 [.notes]
 ****
-* typage -> restriction des classes de programmes possibles
-* model-checking -> analyse exhaustive de l'évolution du programme
-* interprétation abstraite -> analyse d'un sur-ensemble des états possibles
-* vérification déductive -> méthode où l'on démontre la complétude et la correction sémantique des éléments du programme
+* typage -> restrict possible range of programs
+* model-checking -> exhaustive analysis of program possible states
+* abstract interpretation -> analysis of a subset of possible states for program components
+* theorem proving -> demonstration of program completeness and semantic of program components
 
-Alonzo Church, Kurt Gödel et Alan Turing, dans les années 1930 démontrent avec le problème de l'arrêt et le théorème de Rice que l’analyse de programmes n'est pas déterministe.
-Il n’existe aucune méthode « mécanique » qui peut toujours dire sans se tromper au vu d’un programme si celui-ci va ou non produire des erreurs à l’exécution.
+Alonzo Church, Kurt Gödel et Alan Turing during the 30's demonstrate with the halting probleme and Rice theorem that program analysis is non deterministic
+
+There is no method to predict for *every* program if it might run with mistakes without actually running it
 ****
 
-=== Revue de code
+=== Reviews
 [%step]
 * formal audit
 * change review
@@ -62,10 +77,10 @@ Il n’existe aucune méthode « mécanique » qui peut toujours dire sans se tr
 
 [.notes]
 ****
-* Inspection formelle -> efficace mais lourd
-* Revue des changements -> diff reviews, pull/merge request
-* Revue par dessus l'épaule -> explication du developpeur à un collègue, en général sur son poste
-* Binômage -> Developpement à deux sur la même machine
+formal audit -> efficient, but not practical
+change review -> diff reviews, pull/merge request
+over-the-shoulder -> informal reviews, usually on a developper computer
+pair programming -> Developpement à deux sur la même machine
 ****
 
 == Automated Code Review
@@ -80,8 +95,15 @@ Il n’existe aucune méthode « mécanique » qui peut toujours dire sans se tr
 * Automating everything is impossible
 * False positive / false negative
 
+[.notes]
+****
+Fast -> incomparably short compared to human review
+Exhaustive -> integral codebase can be reviewed everytime
+Precise -> violations can be precisely pointed (codeline)
+****
+
 [%notitle]
-=== Limitations - Exemple
+=== Limitations - Example
 [source, java]
 --
 public class MathUtils{
@@ -94,32 +116,40 @@ public class MathUtils{
 }
 --
 
-[.notes]
-****
-* Rapidité -> temps ridiculement court comparé à une revue humaine
-* Exhaustivité -> l'intégralité du code peut être analysée
-* Précision -> erreurs trouvé à des lignes de code précise
-****
+== SonarQube Main Concepts
 
-== SonarQube
-
-https://docs.sonarqube.org/latest/[Latest Documentation]
-
-[.stretch]
-image::sonarqube-icon.svg[sonarqube-logo]
-
-[.columns]
-=== Concepts
-
-[.column]
-[%steps]
 * Metric
 * Measure
 * Rule
 * Issue
 
-[.column]
-[%steps]
+[.notes]
+****
+Metric -> Measure type, qualitative or quantitative
+
+Measure -> Metric value for a file or project for a specific analysis
+
+Rule -> Recommended standard or practice
+
+Issue -> Rule violation for a specific analysis
+****
+
+=== Water Leak
+
+image:water-leak2.jpg[water-leak, height=560, class=plain]
+
+=== Analysis
+* Blame data import
+* Static analysis of source code
+* [Optional] Static analysis of compiled code
+
+[.note]
+****
+Snapshot ->	All measures of one specific analysis
+****
+
+=== Issue types
+
 * Bug
 * Vulnerability
 * Security Hotspot
@@ -127,55 +157,14 @@ image::sonarqube-icon.svg[sonarqube-logo]
 
 [.notes]
 ****
-* Metric: Type de mesure, qualitative ou quantitative
-* Measure: Valeur d'une métrique sur un fichier ou un projet à un instant T
-* Rule: Un standard ou une pratique à suivre.
-* Bug: Une erreur dans le code
-* Issue: Violation de règle à un instant T
+Bug -> wrong or probably wrong code
 
-* Code erroné ou probablement erroné -> Bug rule.
-* Code exploitable par un hacker -> Vulnerability rule.
-* Relatif à la securité, à reviser manuellement -> Security Hotspot rule.
-* Sinon -> Code Smell rule.
+Vulnerability -> code allowing hacker abuse
+
+Security Hotspot -> all security related that can only be manually reviewed
+
+Code Smell -> all the rest
 ****
-
-[.columns]
-=== Sonarqube Specifics
-
-[.column]
-* Quality Profile 
-* Remediation Cost
-
-[.column]
-* Snapshot
-* Technical Debt
-
-[.notes]
-****
-* Quality Profile:	Ensembles de règles.
-* Snapshot:	Ensemble de mesures et violations d'un profil qualité à un instant T, généré à chaque analyse
-* Remediation Cost:	Temps estimé pour réparer les Vulnerability and Reliability Issues.
-* Technical Debt:	Temps estimé pour réparer les Maintainability Issues / code smells
-****
-
-=== Water Leak
-
-image:water-leak2.jpg[water-leak, height=560]
-
-[.notes]
-****
-* New Code Period
-** Global level
-** Project level
-** Branch level
-****
-
-=== Quality Gate
-Is it Releasable ?
-
-* [GREEN]#passing#
-* [ORANGE]#warning#
-* [RED]#failure#
 
 === Severity
 What's the worst thing that could happen, and how likely will it happens ?
@@ -186,51 +175,58 @@ What's the worst thing that could happen, and how likely will it happens ?
 | Other    | [BLUE]#Info#            | [GREEN]#*A*#
 |===
 
+== SonarQube Specific Concepts
+
+* Quality Profile
+
 [.notes]
 ****
-* Bugs
-** Impact: Could the Worst Thing cause the application to crash or to corrupt stored data?
-** Likelihood: What's the probability that the Worst Thing will happen?
-* Vulnerabilities
-** Impact: Could the exploitation of the Worst Thing result in significant damage to your assets or your users?
-** Likelihood: What is the probability that a hacker will be able to exploit the Worst Thing?
+Quality Profile -> Rule set to apply for analysis
 ****
 
-== SonarQube Analysis
-* Blame data importation
-* Static analysis of source code
-* [Optional] Static analysis of compiled code
+=== SonarQube Specific Concepts
+
+* Remediation Cost
+* Technical Debt
+
+[.notes]
+****
+Remediation Cost ->	Estimated time to fix Vulnerability and Reliability Issues.
+
+Technical Debt ->	Estimated time to fix Maintainability Issues and Code Smells
+****
+
+=== Quality Gate
+Is it Releasable ?
+
+* [GREEN]#passing#
+* [ORANGE]#warning#
+* [RED]#failure#
+
+[.notes]
+****
+Quality Gate -> Snapshot quality decision tool
+****
 
 === Short-lived branches
 
-[graphviz]
+[graphviz, g1, svg]
 ----
 digraph G {
     rankdir=LR;
-    node [shape=circle, style=filled, width=0.2, fixedsize=true, label=""]
-
+    edge [color=white]
+    node [color=white shape=point width=0.2]
+    graph[color=white bgcolor=transparent fontcolor=white splines=ortho style=rounded]
+            
     subgraph cluster_1 {
-        label = "develop"
-        style=dotted
-        color=grey
-
-        c1
-        c1
-        c2
-        c3
-        c4
-        c5
+        label = "main branch"
         c0 -> c1 -> c2 -> c3 -> c4 -> c5
     }
-    
+
     subgraph cluster_2 {
         label = "feature branch"
-        style=dotted
-        color=grey
-        s1
         c1 -> s1 -> c3
     }
-
 }
 ----
 * should live less than a few days
@@ -246,34 +242,26 @@ Security fixes
 
 === Long-lived branches
 
-[graphviz]
+[graphviz, g2, svg]
 ----
 digraph G {
     rankdir=LR;
-    node [shape=circle, style=filled, width=0.2, fixedsize=true, label=""]
-    
+    edge [color=white]
+    node [color=white shape=point width=0.2]
+    graph[color=white bgcolor=transparent fontcolor=white splines=ortho style=rounded]
+        
     subgraph cluster_0 {
         label = "main"
-        style=dotted
-        color=grey
-        m1
-        m2
-        m3
+        m4 [style=invis]
         m1 -> m2 -> m3
+        m3 -> m4 [style=dotted arrowhead=none]
+        m4 -> m5 [style=dotted]
     }
 
-    subgraph cluster_1 {
+    subgraph cluster_2 {
         label = "release 5.6"
-        style=dotted
-        color=grey
-        c1
-        c2
-        c3
-        c4
-        c5
-        m1 -> c1 -> c2 -> c3 -> c4 -> c5
+        m2 -> c1 -> c2 -> c3
     }
-
 }
 ----
 * represent a divergent branch
