@@ -1,0 +1,226 @@
+= Simple diagramming tools 
+http://blockdiag.com/
+
+[%notitle]
+== Blockdiag simple example
+[blockdiag]
+----
+blockdiag {
+  A -> B
+  B -> C
+  C -> A
+
+  A -> Alpha
+  Alpha -> Beta
+  Beta -> C
+  B -> C  
+}
+----
+
+[%notitle]
+== Blockdiag simple source
+[source]
+----
+blockdiag {
+  A -> B
+  B -> C
+  C -> A
+
+  A -> Alpha
+  Alpha -> Beta
+  Beta -> C
+  B -> C  
+}
+----
+
+[%notitle]
+== Blockdiag shapes example
+[blockdiag]
+----
+blockdiag {
+  box [shape = box]
+  square [shape = square]
+  roundedbox [shape = roundedbox, stacked]
+  dots [shape = dots]
+
+  box -> square -> roundedbox -> dots
+
+  circle [shape = circle]
+  ellipse [shape = ellipse]
+  diamond [shape = diamond]
+  minidiamond [shape = minidiamond]
+
+  circle -> ellipse -> diamond -> minidiamond
+
+  note [shape = note]
+  mail [shape = mail]
+  cloud [shape = cloud]
+  actor [shape = actor]
+
+  note -> mail -> cloud -> actor
+
+  condition [shape = flowchart.condition]
+  database [shape = flowchart.database, stacked]
+  terminator [shape = flowchart.terminator]
+  input [shape = flowchart.input]
+
+  condition -> database -> terminator -> input
+  
+  beginpoint [shape = beginpoint]
+  endpoint [shape = endpoint]
+  loopin [shape = flowchart.loopin, stacked]
+  loopout [shape = flowchart.loopout]
+
+  beginpoint -> loopin -> loopout -> endpoint
+}
+----
+
+[%notitle]
+== Blockdiag shapes source
+[source]
+----
+blockdiag {
+  box [shape = box]
+  square [shape = square]
+  roundedbox [shape = roundedbox, stacked]
+  dots [shape = dots]
+
+  box -> square -> roundedbox -> dots
+
+  circle [shape = circle]
+  ellipse [shape = ellipse]
+  diamond [shape = diamond]
+  minidiamond [shape = minidiamond]
+
+  circle -> ellipse -> diamond -> minidiamond
+
+  note [shape = note]
+  mail [shape = mail]
+  cloud [shape = cloud]
+  actor [shape = actor]
+
+  note -> mail -> cloud -> actor
+
+  condition [shape = flowchart.condition]
+  database [shape = flowchart.database, stacked]
+  terminator [shape = flowchart.terminator]
+  input [shape = flowchart.input]
+
+  condition -> database -> terminator -> input
+  
+  beginpoint [shape = beginpoint]
+  endpoint [shape = endpoint]
+  loopin [shape = flowchart.loopin, stacked]
+  loopout [shape = flowchart.loopout]
+
+  beginpoint -> loopin -> loopout -> endpoint
+}
+----
+
+[%notitle]
+== Seqdiag example
+[seqdiag]
+----
+seqdiag {
+  browser  -> webserver [label = "GET /index.html"];
+  browser <-- webserver;
+  browser  -> webserver [label = "POST /blog/comment"];
+              webserver  -> database [label = "INSERT comment"];
+              webserver <-- database;
+  browser <-- webserver;
+}
+----
+
+[%notitle]
+== Seqdiag source
+[source]
+----
+seqdiag {
+  browser  -> webserver [label = "GET /index.html"];
+  browser <-- webserver;
+  browser  -> webserver [label = "POST /blog/comment"];
+              webserver  -> database [label = "INSERT comment"];
+              webserver <-- database;
+  browser <-- webserver;
+}
+----
+
+[%notitle]
+== Actdiag example
+[actdiag]
+----
+actdiag {
+  write -> convert -> image
+
+  lane user {
+     label = "User"
+     write [label = "Writing reST"];
+     image [label = "Get diagram IMAGE"];
+  }
+  lane actdiag {
+     convert [label = "Convert reST to Image"];
+  }
+}
+----
+
+[%notitle]
+== Actdiag source
+[source]
+----
+actdiag {
+  write -> convert -> image
+
+  lane user {
+     label = "User"
+     write [label = "Writing reST"];
+     image [label = "Get diagram IMAGE"];
+  }
+  lane actdiag {
+     convert [label = "Convert reST to Image"];
+  }
+}
+----
+
+[%notitle]
+== Nwdiag example
+[nwdiag]
+----
+nwdiag {
+  network dmz {
+      address = "210.x.x.x/24"
+
+      web01 [address = "210.x.x.1"];
+      web02 [address = "210.x.x.2"];
+  }
+  network internal {
+      address = "172.x.x.x/24";
+
+      web01 [address = "172.x.x.1"];
+      web02 [address = "172.x.x.2"];
+      db01;
+      db02;
+  }
+}
+----
+
+[%notitle]
+== Nwdiag source
+[source]
+----
+nwdiag {
+  network dmz {
+      address = "210.x.x.x/24"
+
+      web01 [address = "210.x.x.1"];
+      web02 [address = "210.x.x.2"];
+  }
+  network internal {
+      address = "172.x.x.x/24";
+
+      web01 [address = "172.x.x.1"];
+      web02 [address = "172.x.x.2"];
+      db01;
+      db02;
+  }
+}
+----

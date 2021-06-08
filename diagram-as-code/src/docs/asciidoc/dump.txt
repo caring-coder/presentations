@@ -1,0 +1,525 @@
+== Vega
+
+=== Vegalite example
+[vegalite]
+----
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "A scatterplot showing body mass and flipper lengths of penguins.",
+  "data": {
+    "url": "data/penguins.json"
+  },
+  "mark": "point",
+  "encoding": {
+    "x": {
+      "field": "Flipper Length (mm)",
+      "type": "quantitative",
+      "scale": {"zero": false}
+    },
+    "y": {
+      "field": "Body Mass (g)",
+      "type": "quantitative",
+      "scale": {"zero": false}
+    },
+    "color": {"field": "Species", "type": "nominal"},
+    "shape": {"field": "Species", "type": "nominal"}
+  }
+}
+
+----
+
+== Wavedrom
+
+=== Wavedrom example
+[wavedrom]
+----
+{ assign:[
+  ["z", ["~&",
+    ["~^", ["~", "p0"], ["~", "q0"]],
+    ["~^", ["~", "p1"], ["~", "q1"]],
+    ["~^", ["~", "p2"], ["~", "q2"]],
+    "...",
+    ["~^", ["~", "p7"], ["~", "q7"]],
+    ["~","~en"]
+  ]]
+]}
+----
+
+== Pikchr
+
+=== Pikchr Example
+[pikchr]
+----
+# demo label: Swimlanes
+    $laneh = 0.75
+
+    # Draw the lanes
+    down
+    box width 3.5in height $laneh fill 0xacc9e3
+    box same fill 0xc5d8ef
+    box same as first box
+    box same as 2nd box
+    line from 1st box.sw+(0.2,0) up until even with 1st box.n \
+      "Alan" above aligned
+    line from 2nd box.sw+(0.2,0) up until even with 2nd box.n \
+      "Betty" above aligned
+    line from 3rd box.sw+(0.2,0) up until even with 3rd box.n \
+      "Charlie" above aligned
+    line from 4th box.sw+(0.2,0) up until even with 4th box.n \
+       "Darlene" above aligned
+
+    # fill in content for the Alice lane
+    right
+A1: circle rad 0.1in at end of first line + (0.2,-0.2) \
+       fill white thickness 1.5px "1" 
+    arrow right 50%
+    circle same "2"
+    arrow right until even with first box.e - (0.65,0.0)
+    ellipse "future" fit fill white height 0.2 width 0.5 thickness 1.5px
+A3: circle same at A1+(0.8,-0.3) "3" fill 0xc0c0c0
+    arrow from A1 to last circle chop "fork!" below aligned
+
+    # content for the Betty lane
+B1: circle same as A1 at A1-(0,$laneh) "1"
+    arrow right 50%
+    circle same "2"
+    arrow right until even with first ellipse.w
+    ellipse same "future"
+B3: circle same at A3-(0,$laneh) "3"
+    arrow right 50%
+    circle same as A3 "4"
+    arrow from B1 to 2nd last circle chop
+
+    # content for the Charlie lane
+C1: circle same as A1 at B1-(0,$laneh) "1"
+    arrow 50%
+    circle same "2"
+    arrow right 0.8in "goes" "offline"
+C5: circle same as A3 "5"
+    arrow right until even with first ellipse.w \
+      "back online" above "pushes 5" below "pulls 3 &amp; 4" below
+    ellipse same "future"
+
+    # content for the Darlene lane
+D1: circle same as A1 at C1-(0,$laneh) "1"
+    arrow 50%
+    circle same "2"
+    arrow right until even with C5.w
+    circle same "5"
+    arrow 50%
+    circle same as A3 "6"
+    arrow right until even with first ellipse.w
+    ellipse same "future"
+D3: circle same as B3 at B3-(0,2*$laneh) "3"
+    arrow 50%
+    circle same "4"
+    arrow from D1 to D3 chop
+
+----
+
+=== Pikchr Example
+[pikchr]
+----
+$r = 0.2in
+linerad = 0.75*$r
+linewid = 0.25
+
+# Start and end blocks
+#
+box "element" bold fit
+line down 50% from last box.sw
+dot rad 250% color black
+X0: last.e + (0.3,0)
+arrow from last dot to X0
+move right 3.9in
+box wid 5% ht 25% fill black
+X9: last.w - (0.3,0)
+arrow from X9 to last box.w
+
+
+# The main rule that goes straight through from start to finish
+#
+box "object-definition" italic fit at 11/16 way between X0 and X9
+arrow to X9
+arrow from X0 to last box.w
+
+# The LABEL: rule
+#
+arrow right $r from X0 then down 1.25*$r then right $r
+oval " LABEL " fit
+arrow 50%
+oval "\":\"" fit
+arrow 200%
+box "position" italic fit
+arrow
+line right until even with X9 - ($r,0) \
+  then up until even with X9 then to X9
+arrow from last oval.e right $r*0.5 then up $r*0.8 right $r*0.8
+line up $r*0.45 right $r*0.45 then right
+
+# The VARIABLE = rule
+#
+arrow right $r from X0 then down 2.5*$r then right $r
+oval " VARIABLE " fit
+arrow 70%
+box "assignment-operator" italic fit
+arrow 70%
+box "expr" italic fit
+line right until even with X9 - ($r,0) \
+  then up until even with X9 then to X9
+
+# The PRINT rule
+#
+arrow right $r from X0 then down 3.75*$r then right $r
+oval "\"print\"" fit
+arrow
+box "print-args" italic fit
+line right until even with X9 - ($r,0) \
+  then up until even with X9 then to X9
+----
+
+=== Pikchr Swimlane
+
+[pikchr]
+----
+# demo label: Swimlanes
+    $laneh = 0.75
+
+    # Draw the lanes
+    down
+    box width 3.5in height $laneh fill 0xacc9e3
+    box same fill 0xc5d8ef
+    box same as first box
+    box same as 2nd box
+    line from 1st box.sw+(0.2,0) up until even with 1st box.n \
+      "Alan" above aligned
+    line from 2nd box.sw+(0.2,0) up until even with 2nd box.n \
+      "Betty" above aligned
+    line from 3rd box.sw+(0.2,0) up until even with 3rd box.n \
+      "Charlie" above aligned
+    line from 4th box.sw+(0.2,0) up until even with 4th box.n \
+       "Darlene" above aligned
+
+    # fill in content for the Alice lane
+    right
+A1: circle rad 0.1in at end of first line + (0.2,-0.2) \
+       fill white thickness 1.5px "1" 
+    arrow right 50%
+    circle same "2"
+    arrow right until even with first box.e - (0.65,0.0)
+    ellipse "future" fit fill white height 0.2 width 0.5 thickness 1.5px
+A3: circle same at A1+(0.8,-0.3) "3" fill 0xc0c0c0
+    arrow from A1 to last circle chop "fork!" below aligned
+
+    # content for the Betty lane
+B1: circle same as A1 at A1-(0,$laneh) "1"
+    arrow right 50%
+    circle same "2"
+    arrow right until even with first ellipse.w
+    ellipse same "future"
+B3: circle same at A3-(0,$laneh) "3"
+    arrow right 50%
+    circle same as A3 "4"
+    arrow from B1 to 2nd last circle chop
+
+    # content for the Charlie lane
+C1: circle same as A1 at B1-(0,$laneh) "1"
+    arrow 50%
+    circle same "2"
+    arrow right 0.8in "goes" "offline"
+C5: circle same as A3 "5"
+    arrow right until even with first ellipse.w \
+      "back online" above "pushes 5" below "pulls 3 &amp; 4" below
+    ellipse same "future"
+
+    # content for the Darlene lane
+D1: circle same as A1 at C1-(0,$laneh) "1"
+    arrow 50%
+    circle same "2"
+    arrow right until even with C5.w
+    circle same "5"
+    arrow 50%
+    circle same as A3 "6"
+    arrow right until even with first ellipse.w
+    ellipse same "future"
+D3: circle same as B3 at B3-(0,2*$laneh) "3"
+    arrow 50%
+    circle same "4"
+    arrow from D1 to D3 chop
+
+----
+
+== SvgBob
+
+=== SvgBob Example
+[svgbob]
+----
+                                      .-.                           .--------.
+                                   .-+   |                         |          |
+                               .--+       '--.                     |'--------'|
+                              |  Server Cloud |<------------------>| Database |
+                               '-------------'                     |          |
+                                   ^      ^                         '--------'
+                    Internet       |      |                              ^
+          .------------------------'      '-------------.                |
+          |                                             |                v
+          v                                             v              .------.       .------.
+     .--------.      WiFi     .--------.  Bluetooth  .-----.          / #  # /|      / #  # /|
+     |        |<------------->|        |<---------->|       |        +------+/| LAN +------+/|
+     |Windows |               |  OS X  |            |  iOS  |        |      +/|<--->|      +/|
+     +--------+               +--------+            |       |        |Ubuntu+/|     |Ubuntu+/|
+    /// ____ \\\             /// ____ \\\           |   o   |        |      +/      |      +/
+   '------------'           '------------'           '-----'         '------'       '------'
+      Laptop 1                 Laptop 2              Tablet 1         Dedicated Server Rack
+----
+
+=== SvgBob Example
+[svgbob]
+----
+                                                                             .
+    0       3                          P *              Eye /         ^     /
+     *-------*      +y                    \                +)          \   /  Reflection
+  1 /|    2 /|       ^                     \                \           \ v
+   *-------* |       |                v0    \       v3           --------*--------
+   | |4    | |7      | ◄╮               *----\-----*
+   | *-----|-*     ⤹ +-----> +x        /      v X   \          .-.<--------        o
+   |/      |/       / ⤴               /        o     \        ( / ) Refraction    / \
+   *-------*       v                 /                \        '-'               /   \
+  5       6      +z              v1 *------------------* v2    |                o-----o
+                                                               v
+
+----
+
+== SMCat
+
+=== SMCat Example
+[smcat]
+----
+initial,
+doing: entry/ write unit test
+       do/ write code
+       exit/ ...,
+# smcat recognizes initial
+# and final states by name
+# and renders them appropriately
+final;
+
+initial      => "on backlog" : item adds most value;
+"on backlog" => doing        : working on it;
+doing        => testing      : built & unit tested;
+testing      => "on backlog" : test not ok;
+testing      => final        : test ok;
+----
+
+== Shaape
+
+=== Shaape Example
+[shaape]
+----
+*-----------------------------*
+|                             |
+|      cyclic dependency      |
+|           +-+               |
+|     +-----+  \  +-----+     |      
+|    /    input +  +     \    |
+|   /    +--+  /  +--+    \   |
+|  /    /   +-+       \    \  |  
+| +    +               +    + |
+| |    |               |    | |
+| +    +               +    + |
+|  \    \       +-+   /    /  |  
+|   \    +--+  /  +--+    /   | 
+|    \     +  + output   /    |  
+|     +-----+  \  +-----+     |   
+|               +-+           |
+*-----------------------------*
+options:
+- ".*": {fill:[[0.8, 0.3, 0.3],[0.3, 0.8, 0.3]],frame:[3],text:[[1,1,1]]}
+- "input": {fill:[green,blue],frame:[[0.3, 0.2, 0.2, 0.0],1]}
+- "output": {fill:[[0, 1, 0, 0.0],[0, 0, 1, 0.4],no-shadow],frame:[[0.3, 0.2, 0.2, 0.0], dotted, 4]}
+----
+== Erd
+https://github.com/BurntSushi/erd
+=== Erd example
+[erd]
+----
+title {label: "nfldb Entity-Relationship diagram (condensed)", size: "20"}
+
+[player] {bgcolor: "#d0e0d0"}
+  *player_id {label: "varchar, not null"}
+  full_name {label: "varchar, null"}
+  team {label: "varchar, not null"}
+  position {label: "player_pos, not null"}
+  status {label: "player_status, not null"}
+
+[game] {bgcolor: "#ececfc"}
+  *gsis_id {label: "gameid, not null"}
+  start_time {label: "utctime, not null"}
+  week {label: "usmallint, not null"}
+  season_year {label: "usmallint, not null"}
+  season_type {label: "season_phase, not null"}
+  finished {label: "boolean, not null"}
+  home_team {label: "varchar, not null"}
+  home_score {label: "usmallint, not null"}
+  away_team {label: "varchar, not null"}
+  away_score {label: "usmallint, not null"}
+
+[drive] {bgcolor: "#ececfc"}
+  *+gsis_id {label: "gameid, not null"}
+  *drive_id {label: "usmallint, not null"}
+  start_field {label: "field_pos, null"}
+  start_time {label: "game_time, not null"}
+  end_field {label: "field_pos, null"}
+  end_time {label: "game_time, not null"}
+  pos_team {label: "varchar, not null"}
+  pos_time {label: "pos_period, null"}
+
+[play] {bgcolor: "#ececfc"}
+  *+gsis_id {label: "gameid, not null"}
+  *+drive_id {label: "usmallint, not null"}
+  *play_id {label: "usmallint, not null"}
+  time {label: "game_time, not null"}
+  pos_team {label: "varchar, not null"}
+  yardline {label: "field_pos, null"}
+  down {label: "smallint, null"}
+  yards_to_go {label: "smallint, null"}
+
+[play_player] {bgcolor: "#ececfc"}
+  *+gsis_id {label: "gameid, not null"}
+  *+drive_id {label: "usmallint, not null"}
+  *+play_id {label: "usmallint, not null"}
+  *+player_id {label: "varchar, not null"}
+  team {label: "varchar, not null"}
+
+game        1--* drive
+game        1--* play
+game        1--* play_player
+
+drive       1--* play
+drive       1--* play_player
+
+play        1--* play_player
+
+player      1--* play_player
+----
+
+=== Erd source
+[source]
+----
+title {label: "nfldb Entity-Relationship diagram (condensed)", size: "20"}
+
+[player] {bgcolor: "#d0e0d0"}
+  *player_id {label: "varchar, not null"}
+  full_name {label: "varchar, null"}
+  team {label: "varchar, not null"}
+  position {label: "player_pos, not null"}
+  status {label: "player_status, not null"}
+
+[game] {bgcolor: "#ececfc"}
+  *gsis_id {label: "gameid, not null"}
+  start_time {label: "utctime, not null"}
+  week {label: "usmallint, not null"}
+  season_year {label: "usmallint, not null"}
+  season_type {label: "season_phase, not null"}
+  finished {label: "boolean, not null"}
+  home_team {label: "varchar, not null"}
+  home_score {label: "usmallint, not null"}
+  away_team {label: "varchar, not null"}
+  away_score {label: "usmallint, not null"}
+
+[drive] {bgcolor: "#ececfc"}
+  *+gsis_id {label: "gameid, not null"}
+  *drive_id {label: "usmallint, not null"}
+  start_field {label: "field_pos, null"}
+  start_time {label: "game_time, not null"}
+  end_field {label: "field_pos, null"}
+  end_time {label: "game_time, not null"}
+  pos_team {label: "varchar, not null"}
+  pos_time {label: "pos_period, null"}
+
+[play] {bgcolor: "#ececfc"}
+  *+gsis_id {label: "gameid, not null"}
+  *+drive_id {label: "usmallint, not null"}
+  *play_id {label: "usmallint, not null"}
+  time {label: "game_time, not null"}
+  pos_team {label: "varchar, not null"}
+  yardline {label: "field_pos, null"}
+  down {label: "smallint, null"}
+  yards_to_go {label: "smallint, null"}
+
+[play_player] {bgcolor: "#ececfc"}
+  *+gsis_id {label: "gameid, not null"}
+  *+drive_id {label: "usmallint, not null"}
+  *+play_id {label: "usmallint, not null"}
+  *+player_id {label: "varchar, not null"}
+  team {label: "varchar, not null"}
+
+game        1--* drive
+game        1--* play
+game        1--* play_player
+
+drive       1--* play
+drive       1--* play_player
+
+play        1--* play_player
+
+player      1--* play_player
+----
+
+== Mscgen
+http://www.mcternan.me.uk/mscgen/
+
+=== Mscgen Example
+[msc]
+----
+msc {
+  hscale = "2";
+
+  a,b,c;
+
+  a->b [ label = "ab()" ] ;
+  b->c [ label = "bc(TRUE)"];
+  c=>c [ label = "process(1)" ];
+  c=>c [ label = "process(2)" ];
+  ...;
+  c=>c [ label = "process(n)" ];
+  c=>c [ label = "process(END)" ];
+  a<<=c [ label = "callback()"];
+  ---  [ label = "If more to run", ID="*" ];
+  a->a [ label = "next()"];
+  a->c [ label = "ac1()\nac2()"];
+  b<-c [ label = "cb(TRUE)"];
+  b->b [ label = "stalled(...)"];
+  a<-b [ label = "ab() = FALSE"];
+}
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+:<math>int_0^1f(x)dx</math>;
+:<math>x^2+y_1+z_12^34</math>;
+note right
+Try also
+<math>d/dxf(x)=lim_(h->0)(f(x+h)-f(x))/h</math>
+<math>P(y|bb"x") or f(bb"x")+epsilon</math>
+end note
+@enduml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+:<math>int_0^1f(x)dx</math>;
+:<math>x^2+y_1+z_12^34</math>;
+note right
+Try also
+<math>d/dxf(x)=lim_(h->0)(f(x+h)-f(x))/h</math>
+<math>P(y|bb"x") or f(bb"x")+epsilon</math>
+end note
+@enduml
+----

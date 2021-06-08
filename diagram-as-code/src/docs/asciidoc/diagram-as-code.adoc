@@ -1,0 +1,28 @@
+= Diagram as code
+Joseph Verron <joseph.verron@softeam.fr>
+v1.0, June 6, 2021
+:description: https://github.com/josephverron/presentations/tree/master/diagram-as-code
+:imagesdir: images
+:source-highlighter: highlightjs
+
+:toc:
+
+:leveloffset: +1
+
+include::subdir/tools.adoc[]
+
+include::subdir/graphviz.adoc[]
+
+include::subdir/plantuml.adoc[]
+
+include::subdir/gnuplot.adoc[]
+
+include::subdir/simplediag.adoc[]
+
+include::subdir/mingram.adoc[]
+
+include::subdir/mermaid.adoc[]
+
+include::subdir/asciidiag.adoc[]
+
+:leveloffset: -1

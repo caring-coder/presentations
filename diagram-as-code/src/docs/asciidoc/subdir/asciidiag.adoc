@@ -1,0 +1,76 @@
+= Ascii Art Diagramming
+http://ditaa.sourceforge.net/#usage
+https://github.com/christiangoltz/shaape 
+https://github.com/ivanceras/svgbob 
+https://github.com/asciitosvg/asciitosvg
+
+
+[%notitle]
+== Ditaa example
+[ditaa]
+----
+              +-------------+
+              | asciidoctor |-----------+
+              |  diagram {d}|           |
+              +-------------+           | image
+                    ^                   |
+                    | diagram source    |
+                    |                   v
+ +---------+   +-----+-------+    /---------------\
+ |  adoc{s}|-->+ asciidoctor +    | HTML + image  |
+ +---------+   +-------------+    \---------------/
+----
+
+[%notitle]
+== Ditaa source
+[source]
+----
+              +-------------+
+              | asciidoctor |-----------+
+              |  diagram {d}|           |
+              +-------------+           | image
+                    ^                   |
+                    | diagram source    |
+                    |                   v
+ +---------+   +-----+-------+    /---------------\
+ |  adoc{s}|-->+ asciidoctor +    | HTML + image  |
+ +---------+   +-------------+    \---------------/
+----
+
+[%notitle]
+== A2S example
+[a2s]
+----
+ .-------------------------.
+ |                         |
+ | .---.-. .-----. .-----. |
+ | | .-. | +-->  | |  <--+ |
+ | | '-' | |  <--+ +-->  | |
+ | '---'-' '-----' '-----' |
+ |  ascii     2      svg   |
+ |                         |
+ '-------------------------'
+
+https://github.com/asciitosvg
+
+[1,0]: {"fill":"#88d","a2s:delref":1}
+----
+
+[%notitle]
+== A2S source
+[source]
+----
+ .-------------------------.
+ |                         |
+ | .---.-. .-----. .-----. |
+ | | .-. | +-->  | |  <--+ |
+ | | '-' | |  <--+ +-->  | |
+ | '---'-' '-----' '-----' |
+ |  ascii     2      svg   |
+ |                         |
+ '-------------------------'
+
+https://github.com/asciitosvg
+
+[1,0]: {"fill":"#88d","a2s:delref":1}
+----

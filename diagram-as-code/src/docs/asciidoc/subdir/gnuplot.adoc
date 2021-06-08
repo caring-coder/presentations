@@ -1,0 +1,234 @@
+= Gnuplot
+http://www.gnuplot.info/
+
+[%notitle]
+== Gnuplot Example
+[gnuplot]
+----
+set border 2 front lt black linewidth 1.000 dashtype solid
+set boxwidth 0.5 absolute
+set style fill   solid 0.50 border lt -1
+unset key
+set pointsize 0.5
+set style data boxplot
+set xtics border in scale 0,0 nomirror norotate  autojustify
+set xtics  norangelimit 
+set xtics   ("Nuclear" 1.00000, "Coal" 2.00000, "Gas" 3.00000, "Oil" 4.00000, "Hydroelectric" 5.00000, "Renewable" 6.00000)
+set ytics border in scale 1,0.5 nomirror norotate  autojustify
+set title "Distribution of energy usage explicitly ordered by name of energy source\n" 
+set xrange [ * : * ] noreverse writeback
+set x2range [ * : * ] noreverse writeback
+set ylabel "Billion Tons of Oil Equivalent" 
+set yrange [ * : * ] noreverse writeback
+set y2range [ * : * ] noreverse writeback
+set zrange [ * : * ] noreverse writeback
+set cbrange [ * : * ] noreverse writeback
+set rrange [ * : * ] noreverse writeback
+set style boxplot candles range  1.50 nooutliers pt 7 separation 1 labels auto sorted
+t(x) = x/1.e6
+filter(col, factor_col, level) = (strcol(factor_col) eq word(factors, level)) ? t(column(col)) : 1/0
+NO_ANIMATION = 1
+factors = "Nuclear Coal Gas Oil Hydroelectric Renewable"
+NF = 6
+
+## Last datafile plotted: "energy_circles.dat"
+plot for [i=1:NF-2]  'energy_circles.dat' using (i):(filter(8, 4, i)),      for [i=NF-1:NF] 'energy_circles.dat' using (i):(filter(8, 4, i)) noauto
+----
+
+[%notitle]
+== Gnuplot Source
+[source]
+----
+set border 2 front lt black linewidth 1.000 dashtype solid
+set boxwidth 0.5 absolute
+set style fill   solid 0.50 border lt -1
+unset key
+set pointsize 0.5
+set style data boxplot
+set xtics border in scale 0,0 nomirror norotate  autojustify
+set xtics  norangelimit 
+set xtics   ("Nuclear" 1.00000, "Coal" 2.00000, "Gas" 3.00000, "Oil" 4.00000, "Hydroelectric" 5.00000, "Renewable" 6.00000)
+set ytics border in scale 1,0.5 nomirror norotate  autojustify
+set title "Distribution of energy usage explicitly ordered by name of energy source\n" 
+set xrange [ * : * ] noreverse writeback
+set x2range [ * : * ] noreverse writeback
+set ylabel "Billion Tons of Oil Equivalent" 
+set yrange [ * : * ] noreverse writeback
+set y2range [ * : * ] noreverse writeback
+set zrange [ * : * ] noreverse writeback
+set cbrange [ * : * ] noreverse writeback
+set rrange [ * : * ] noreverse writeback
+set style boxplot candles range  1.50 nooutliers pt 7 separation 1 labels auto sorted
+t(x) = x/1.e6
+filter(col, factor_col, level) = (strcol(factor_col) eq word(factors, level)) ? t(column(col)) : 1/0
+NO_ANIMATION = 1
+factors = "Nuclear Coal Gas Oil Hydroelectric Renewable"
+NF = 6
+
+## Last datafile plotted: "energy_circles.dat"
+plot for [i=1:NF-2]  'energy_circles.dat' using (i):(filter(8, 4, i)),      for [i=NF-1:NF] 'energy_circles.dat' using (i):(filter(8, 4, i)) noauto
+----
+
+[%notitle]
+== Gnuplot Example
+[gnuplot]
+----
+set dummy u, v
+unset key
+set wall y0  fc  rgb "bisque"  fillstyle  transparent solid 0.50 border lt -1
+set wall x0  fc  rgb "forest-green"  fillstyle  transparent solid 0.50 border lt -1
+set wall z0  fc  rgb "slategrey"  fillstyle  transparent solid 0.50 border lt -1
+set parametric
+set view map scale 1
+set isosamples 75, 25
+set style data lines
+set xyplane relative 0
+set xtics border in scale 0.5,0.5 nomirror norotate  autojustify
+set xtics  norangelimit -4.00000,2,4.00000
+set ytics border in scale 0.5,0.5 nomirror norotate  autojustify
+set ytics  norangelimit -4.00000,2,4.00000
+set ztics border in scale 0.5,0.5 nomirror norotate  center
+set ztics  norangelimit 0.5
+set cbtics border in scale 0.5,0.5 mirror norotate  autojustify
+set rtics border in scale 0.5,0.5 nomirror norotate  autojustify
+set title "set view map" 
+set urange [ 0.00000 : 31.4159 ] noreverse nowriteback
+set vrange [ 0.00000 : 6.28319 ] noreverse nowriteback
+set xlabel "X-axis" 
+set xrange [ -5.00000 : 5.00000 ] noreverse nowriteback
+set x2range [ * : * ] noreverse writeback
+set ylabel "Y-axis" 
+set yrange [ -5.00000 : 5.00000 ] noreverse nowriteback
+set y2range [ * : * ] noreverse writeback
+set zlabel "Z-axis" 
+set zrange [ * : * ] noreverse writeback
+set cbrange [ * : * ] noreverse writeback
+set rrange [ * : * ] noreverse writeback
+set pm3d implicit at s
+set pm3d depthorder 
+set pm3d interpolate 1,1 flush begin noftriangles border linecolor rgb "black"  linewidth 0.500 dashtype solid corners2color mean
+set palette cubehelix start 0.5 cycles -1.5 saturation 1
+unset colorbox
+NO_ANIMATION = 1
+splot (1-0.1*u*cos(v))*cos(u),(1-0.1*u*cos(v))*sin(u),0.1*(sin(v)+u/1.7-10) with pm3d
+----
+
+[%notitle]
+== Gnuplot Source
+[source]
+----
+set dummy u, v
+unset key
+set wall y0  fc  rgb "bisque"  fillstyle  transparent solid 0.50 border lt -1
+set wall x0  fc  rgb "forest-green"  fillstyle  transparent solid 0.50 border lt -1
+set wall z0  fc  rgb "slategrey"  fillstyle  transparent solid 0.50 border lt -1
+set parametric
+set view map scale 1
+set isosamples 75, 25
+set style data lines
+set xyplane relative 0
+set xtics border in scale 0.5,0.5 nomirror norotate  autojustify
+set xtics  norangelimit -4.00000,2,4.00000
+set ytics border in scale 0.5,0.5 nomirror norotate  autojustify
+set ytics  norangelimit -4.00000,2,4.00000
+set ztics border in scale 0.5,0.5 nomirror norotate  center
+set ztics  norangelimit 0.5
+set cbtics border in scale 0.5,0.5 mirror norotate  autojustify
+set rtics border in scale 0.5,0.5 nomirror norotate  autojustify
+set title "set view map" 
+set urange [ 0.00000 : 31.4159 ] noreverse nowriteback
+set vrange [ 0.00000 : 6.28319 ] noreverse nowriteback
+set xlabel "X-axis" 
+set xrange [ -5.00000 : 5.00000 ] noreverse nowriteback
+set x2range [ * : * ] noreverse writeback
+set ylabel "Y-axis" 
+set yrange [ -5.00000 : 5.00000 ] noreverse nowriteback
+set y2range [ * : * ] noreverse writeback
+set zlabel "Z-axis" 
+set zrange [ * : * ] noreverse writeback
+set cbrange [ * : * ] noreverse writeback
+set rrange [ * : * ] noreverse writeback
+set pm3d implicit at s
+set pm3d depthorder 
+set pm3d interpolate 1,1 flush begin noftriangles border linecolor rgb "black"  linewidth 0.500 dashtype solid corners2color mean
+set palette cubehelix start 0.5 cycles -1.5 saturation 1
+unset colorbox
+NO_ANIMATION = 1
+splot (1-0.1*u*cos(v))*cos(u),(1-0.1*u*cos(v))*sin(u),0.1*(sin(v)+u/1.7-10) with pm3d
+----
+
+[%notitle]
+== Gnuplot Example
+[gnuplot]
+----
+set format cb "%4.1f" 
+set view 49, 28, 1, 1.48
+set samples 25, 25
+set isosamples 50, 50
+set xyplane relative 0
+set cbtics border in scale 0,0 mirror norotate  autojustify
+set title "4D data (3D Heat Map)\nIndependent value color-mapped onto 3D surface" 
+set title  offset character 0, 1, 0 font "" textcolor lt -1 norotate
+set urange [ 5.00000 : 35.0000 ] noreverse nowriteback
+set vrange [ 5.00000 : 35.0000 ] noreverse nowriteback
+set xlabel "x" 
+set xlabel  offset character 3, 0, 0 font "" textcolor lt -1 norotate
+set xrange [ * : * ] noreverse writeback
+set x2range [ * : * ] noreverse writeback
+set ylabel "y" 
+set ylabel  offset character -5, 0, 0 font "" textcolor lt -1 rotate
+set yrange [ * : * ] noreverse writeback
+set y2range [ * : * ] noreverse writeback
+set zlabel "z" 
+set zlabel  offset character 2, 0, 0 font "" textcolor lt -1 norotate
+set zrange [ * : * ] noreverse writeback
+set cbrange [ * : * ] noreverse writeback
+set rrange [ * : * ] noreverse writeback
+set pm3d implicit at s
+set colorbox user
+set colorbox vertical origin screen 0.9, 0.2 size screen 0.03, 0.6 front  noinvert noborder
+sinc(x,y) = sin(sqrt((x-20.)**2+(y-20.)**2))/sqrt((x-20.)**2+(y-20.)**2)
+Z(x,y) = 100. * (sinc(x,y) + 1.5)
+color(x,y) = 10. * (1.1 + sin((x-20.)/5.)*cos((y-20.)/10.))
+NO_ANIMATION = 1
+## Last datafile plotted: "++"
+splot '++' using 1:2:(Z($1,$2)):(color($1,$2)) with pm3d title "4 data columns x/y/z/color"
+----
+
+[%notitle]
+== Gnuplot Source
+[source]
+----
+set format cb "%4.1f" 
+set view 49, 28, 1, 1.48
+set samples 25, 25
+set isosamples 50, 50
+set xyplane relative 0
+set cbtics border in scale 0,0 mirror norotate  autojustify
+set title "4D data (3D Heat Map)\nIndependent value color-mapped onto 3D surface" 
+set title  offset character 0, 1, 0 font "" textcolor lt -1 norotate
+set urange [ 5.00000 : 35.0000 ] noreverse nowriteback
+set vrange [ 5.00000 : 35.0000 ] noreverse nowriteback
+set xlabel "x" 
+set xlabel  offset character 3, 0, 0 font "" textcolor lt -1 norotate
+set xrange [ * : * ] noreverse writeback
+set x2range [ * : * ] noreverse writeback
+set ylabel "y" 
+set ylabel  offset character -5, 0, 0 font "" textcolor lt -1 rotate
+set yrange [ * : * ] noreverse writeback
+set y2range [ * : * ] noreverse writeback
+set zlabel "z" 
+set zlabel  offset character 2, 0, 0 font "" textcolor lt -1 norotate
+set zrange [ * : * ] noreverse writeback
+set cbrange [ * : * ] noreverse writeback
+set rrange [ * : * ] noreverse writeback
+set pm3d implicit at s
+set colorbox user
+set colorbox vertical origin screen 0.9, 0.2 size screen 0.03, 0.6 front  noinvert noborder
+sinc(x,y) = sin(sqrt((x-20.)**2+(y-20.)**2))/sqrt((x-20.)**2+(y-20.)**2)
+Z(x,y) = 100. * (sinc(x,y) + 1.5)
+color(x,y) = 10. * (1.1 + sin((x-20.)/5.)*cos((y-20.)/10.))
+NO_ANIMATION = 1
+## Last datafile plotted: "++"
+splot '++' using 1:2:(Z($1,$2)):(color($1,$2)) with pm3d title "4 data columns x/y/z/color"
+----

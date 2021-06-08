@@ -1,0 +1,134 @@
+= Mingram
+https://diagrams.mingrammer.com/
+
+[%notitle]
+== Mingram example
+[diagrams]
+----
+from diagrams import Cluster, Diagram
+from diagrams.k8s.compute import Pod, StatefulSet
+from diagrams.k8s.network import Service
+from diagrams.k8s.storage import PV, PVC, StorageClass
+
+with Diagram("Stateful Architecture", show=False):
+    with Cluster("Apps"):
+        svc = Service("svc")
+        sts = StatefulSet("sts")
+
+        apps = []
+        for _ in range(3):
+            pod = Pod("pod")
+            pvc = PVC("pvc")
+            pod - sts - pvc
+            apps.append(svc >> pod >> pvc)
+
+    apps << PV("pv") << StorageClass("sc")
+----
+
+[%notitle]
+== Mingram source
+[source]
+----
+from diagrams import Cluster, Diagram
+from diagrams.k8s.compute import Pod, StatefulSet
+from diagrams.k8s.network import Service
+from diagrams.k8s.storage import PV, PVC, StorageClass
+
+with Diagram("Stateful Architecture", show=False):
+    with Cluster("Apps"):
+        svc = Service("svc")
+        sts = StatefulSet("sts")
+
+        apps = []
+        for _ in range(3):
+            pod = Pod("pod")
+            pvc = PVC("pvc")
+            pod - sts - pvc
+            apps.append(svc >> pod >> pvc)
+
+    apps << PV("pv") << StorageClass("sc")
+----
+
+[%notitle]
+== Mingram example 2
+[diagrams]
+----
+from diagrams import Cluster, Diagram
+from diagrams.onprem.analytics import Spark
+from diagrams.onprem.compute import Server
+from diagrams.onprem.database import PostgreSQL
+from diagrams.onprem.inmemory import Redis
+from diagrams.onprem.aggregator import Fluentd
+from diagrams.onprem.monitoring import Grafana, Prometheus
+from diagrams.onprem.network import Nginx
+from diagrams.onprem.queue import Kafka
+
+with Diagram("Advanced Web Service with On-Premise", show=False):
+    ingress = Nginx("ingress")
+
+    metrics = Prometheus("metric")
+    metrics << Grafana("monitoring")
+
+    with Cluster("Service Cluster"):
+        grpcsvc = [
+            Server("grpc1"),
+            Server("grpc2"),
+            Server("grpc3")]
+
+    with Cluster("Sessions HA"):
+        main = Redis("session")
+        main - Redis("replica") << metrics
+        grpcsvc >> main
+
+    with Cluster("Database HA"):
+        main = PostgreSQL("users")
+        main - PostgreSQL("replica") << metrics
+        grpcsvc >> main
+
+    aggregator = Fluentd("logging")
+    aggregator >> Kafka("stream") >> Spark("analytics")
+
+    ingress >> grpcsvc >> aggregator
+----
+
+[%notitle]
+== Mingram source 2
+[source]
+----
+from diagrams import Cluster, Diagram
+from diagrams.onprem.analytics import Spark
+from diagrams.onprem.compute import Server
+from diagrams.onprem.database import PostgreSQL
+from diagrams.onprem.inmemory import Redis
+from diagrams.onprem.aggregator import Fluentd
+from diagrams.onprem.monitoring import Grafana, Prometheus
+from diagrams.onprem.network import Nginx
+from diagrams.onprem.queue import Kafka
+
+with Diagram("Advanced Web Service with On-Premise", show=False):
+    ingress = Nginx("ingress")
+
+    metrics = Prometheus("metric")
+    metrics << Grafana("monitoring")
+
+    with Cluster("Service Cluster"):
+        grpcsvc = [
+            Server("grpc1"),
+            Server("grpc2"),
+            Server("grpc3")]
+
+    with Cluster("Sessions HA"):
+        main = Redis("session")
+        main - Redis("replica") << metrics
+        grpcsvc >> main
+
+    with Cluster("Database HA"):
+        main = PostgreSQL("users")
+        main - PostgreSQL("replica") << metrics
+        grpcsvc >> main
+
+    aggregator = Fluentd("logging")
+    aggregator >> Kafka("stream") >> Spark("analytics")
+
+    ingress >> grpcsvc >> aggregator
+----

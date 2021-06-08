@@ -1,0 +1,158 @@
+= Graphviz
+https://graphviz.org/
+
+[%notitle]
+== Graphviz simple example
+[graphviz]
+----
+digraph G {
+  input -> process -> output
+}
+----
+
+[%notitle]
+== Graphviz simple source
+[source]
+----
+digraph G {  
+  input -> process -> output
+}
+----
+
+[%notitle]
+== Graphviz direction example
+[graphviz]
+----
+digraph G {
+  graph [rankdir=LR]
+  input -> process -> output
+}
+----
+
+[%notitle]
+== Graphviz direction source
+[source]
+----
+digraph G {
+  graph [rankdir=LR]  
+  input -> process -> output
+}
+----
+
+[%notitle]
+== Graphviz complex example
+[graphviz]
+----
+digraph G {
+  graph [rankdir=LR]
+  
+  input_1 -> process_1
+  process_1 -> output_1
+  
+  output_1 -> process_2
+  input_2 -> process_2
+  process_2 -> output_2
+}
+----
+
+[%notitle]
+== Graphviz complex source
+[source]
+----
+digraph G {  
+  graph [rankdir=LR]
+
+  input_1 -> process_1
+  process_1 -> output_1
+  
+  output_1 -> process_2
+  input_2 -> process_2
+  process_2 -> output_2
+}
+----
+
+[%notitle]
+== Graphviz shapes example
+[graphviz]
+----
+digraph G {
+  graph [rankdir=LR]  
+  input_1, output_1, input_2, output_2 [shape=none]
+  process_1, process_2 [shape=rect]
+  
+  input_1 -> process_1
+  process_1 -> output_1
+  
+  output_1 -> process_2
+  input_2 -> process_2
+  process_2 -> output_2
+}
+----
+
+[%notitle]
+== Graphviz shapes source
+[source]
+----
+digraph G {
+  graph [rankdir=LR]  
+  input_1, output_1, input_2, output_2 [shape=none]
+  process_1, process_2 [shape=rect]
+  
+  input_1 -> process_1
+  process_1 -> output_1
+  
+  output_1 -> process_2
+  input_2 -> process_2
+  process_2 -> output_2
+}
+----
+
+[%notitle]
+== Graphviz cluster example
+[graphviz]
+----
+digraph G {
+  graph [rankdir=LR]  
+  input_1, output_1, input_2, output_2 [shape=none]
+  process_1, process_2 [shape=rect]
+  
+  subgraph cluster_0 {
+    label = "process #1";
+    input_1 -> process_1
+    process_1 -> output_1
+  }
+
+  subgraph cluster_1 {
+    label = "process #2";
+    input_2 -> process_2
+    process_2 -> output_2
+  }
+
+  output_1 -> process_2
+}
+----
+
+[%notitle]
+== Graphviz cluster source
+[source]
+----
+digraph G {
+  graph [rankdir=LR]  
+  input_1, output_1, input_2, output_2 [shape=none]
+  process_1, process_2 [shape=rect]
+  
+  subgraph cluster_0 {
+    label = "process #1";
+    input_1 -> process_1
+    process_1 -> output_1
+  }
+
+  subgraph cluster_1 {
+    label = "process #2";
+    input_2 -> process_2
+    process_2 -> output_2
+  }
+
+  output_1 -> process_2
+}
+----

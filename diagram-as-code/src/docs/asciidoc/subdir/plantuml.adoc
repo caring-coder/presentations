@@ -1,0 +1,1025 @@
+= Plantuml
+https://plantuml.com/
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+participant User
+
+User -> A: DoWork
+activate A #FFBBBB
+
+A -> A: Internal call
+activate A #DarkSalmon
+
+A -> B: << createRequest >>
+activate B
+
+B --> A: RequestCreated
+deactivate B
+deactivate A
+A -> User: Done
+deactivate A
+
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[source]
+----
+@startuml
+participant User
+
+User -> A: DoWork
+activate A #FFBBBB
+
+A -> A: Internal call
+activate A #DarkSalmon
+
+A -> B: << createRequest >>
+activate B
+
+B --> A: RequestCreated
+deactivate B
+deactivate A
+A -> User: Done
+deactivate A
+
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+left to right direction
+
+actor GuestCoupon
+actor Guest as g
+package Professional {
+  actor Chef as c
+  actor "Food Critic" as fc
+}
+package Restaurant {
+  usecase "Eat Food" as UC1
+  usecase "Pay for Food" as UC2
+  usecase "Drink" as UC3
+  usecase "Review" as UC4
+}
+fc --> UC4
+g --> UC1
+g --> UC2
+g --> UC3
+@enduml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+left to right direction
+actor Guest as g
+package Professional {
+  actor Chef as c
+  actor "Food Critic" as fc
+}
+package Restaurant {
+  usecase "Eat Food" as UC1
+  usecase "Pay for Food" as UC2
+  usecase "Drink" as UC3
+  usecase "Review" as UC4
+}
+fc --> UC4
+g --> UC1
+g --> UC2
+g --> UC3
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+
+abstract class AbstractList
+abstract AbstractCollection
+interface List
+interface Collection
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+  Object[] elementData
+  size()
+}
+
+enum TimeUnit {
+  DAYS
+  HOURS
+  MINUTES
+}
+
+annotation SuppressWarnings
+
+@enduml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+
+abstract class AbstractList
+abstract AbstractCollection
+interface List
+interface Collection
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+  Object[] elementData
+  size()
+}
+
+enum TimeUnit {
+  DAYS
+  HOURS
+  MINUTES
+}
+
+annotation SuppressWarnings
+
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+
+object user {
+  name = "Dummy"
+  id = 123
+}
+
+object London
+
+London o-- user
+
+map CapitalCity {
+ UK *-> London
+ USA => Washington
+ Germany => Berlin
+}
+
+@enduml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+
+object user {
+  name = "Dummy"
+  id = 123
+}
+
+object London
+
+London o-- user
+
+map CapitalCity {
+ UK *-> London
+ USA => Washington
+ Germany => Berlin
+}
+
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+start
+if (condition A) then (yes)
+  :Text 1;
+elseif (condition B) then (yes)
+  :Text 2;
+  stop
+elseif (condition C) then (yes)
+  :Text 3;
+elseif (condition D) then (yes)
+  :Text 4;
+else (nothing)
+  :Text else;
+endif
+stop
+@enduml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+start
+if (condition A) then (yes)
+  :Text 1;
+elseif (condition B) then (yes)
+  :Text 2;
+  stop
+elseif (condition C) then (yes)
+  :Text 3;
+elseif (condition D) then (yes)
+  :Text 4;
+else (nothing)
+  :Text else;
+endif
+stop
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+
+package "Some Group" {
+  HTTP - [First Component]
+  [Another Component]
+}
+
+node "Other Groups" {
+  FTP - [Second Component]
+  [First Component] --> FTP
+}
+
+cloud {
+  [Example 1]
+}
+
+
+database "MySql" {
+  folder "This is my folder" {
+    [Folder 3]
+  }
+  frame "Foo" {
+    [Frame 4]
+  }
+}
+
+
+[Another Component] --> [Example 1]
+[Example 1] --> [Folder 3]
+[Folder 3] --> [Frame 4]
+
+@enduml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+
+package "Some Group" {
+  HTTP - [First Component]
+  [Another Component]
+}
+
+node "Other Groups" {
+  FTP - [Second Component]
+  [First Component] --> FTP
+}
+
+cloud {
+  [Example 1]
+}
+
+
+database "MySql" {
+  folder "This is my folder" {
+    [Folder 3]
+  }
+  frame "Foo" {
+    [Frame 4]
+  }
+}
+
+
+[Another Component] --> [Example 1]
+[Example 1] --> [Folder 3]
+[Folder 3] --> [Frame 4]
+
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+scale 350 width
+[*] --> NotShooting
+
+state NotShooting {
+  [*] --> Idle
+  Idle --> Configuring : EvConfig
+  Configuring --> Idle : EvConfig
+}
+
+state Configuring {
+  [*] --> NewValueSelection
+  NewValueSelection --> NewValuePreview : EvNewValue
+  NewValuePreview --> NewValueSelection : EvNewValueRejected
+  NewValuePreview --> NewValueSelection : EvNewValueSaved
+
+  state NewValuePreview {
+     State1 -> State2
+  }
+
+}
+@enduml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+scale 350 width
+[*] --> NotShooting
+
+state NotShooting {
+  [*] --> Idle
+  Idle --> Configuring : EvConfig
+  Configuring --> Idle : EvConfig
+}
+
+state Configuring {
+  [*] --> NewValueSelection
+  NewValueSelection --> NewValuePreview : EvNewValue
+  NewValuePreview --> NewValueSelection : EvNewValueRejected
+  NewValuePreview --> NewValueSelection : EvNewValueSaved
+
+  state NewValuePreview {
+     State1 -> State2
+  }
+
+}
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+concise "Client" as Client
+concise "Server" as Server
+concise "Response freshness" as Cache
+
+Server is idle
+Client is idle
+
+@Client
+0 is send
+Client -> Server@+25 : GET
++25 is await
++75 is recv
++25 is idle
++25 is send
+Client -> Server@+25 : GET\nIf-Modified-Since: 150
++25 is await
++50 is recv
++25 is idle
+@100 <-> @275 : no need to re-request from server
+
+@Server
+25 is recv
++25 is work
++25 is send
+Server -> Client@+25 : 200 OK\nExpires: 275
++25 is idle
++75 is recv
++25 is send
+Server -> Client@+25 : 304 Not Modified
++25 is idle
+
+@Cache
+75 is fresh
++200 is stale
+@enduml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+concise "Client" as Client
+concise "Server" as Server
+concise "Response freshness" as Cache
+
+Server is idle
+Client is idle
+
+@Client
+0 is send
+Client -> Server@+25 : GET
++25 is await
++75 is recv
++25 is idle
++25 is send
+Client -> Server@+25 : GET\nIf-Modified-Since: 150
++25 is await
++50 is recv
++25 is idle
+@100 <-> @275 : no need to re-request from server
+
+@Server
+25 is recv
++25 is work
++25 is send
+Server -> Client@+25 : 200 OK\nExpires: 275
++25 is idle
++75 is recv
++25 is send
+Server -> Client@+25 : 304 Not Modified
++25 is idle
+
+@Cache
+75 is fresh
++200 is stale
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startjson
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "isAlive": true,
+  "age": 27,
+  "address": {
+    "streetAddress": "21 2nd Street",
+    "city": "New York",
+    "state": "NY",
+    "postalCode": "10021-3100"
+  },
+  "phoneNumbers": [
+    {
+      "type": "home",
+      "number": "212 555-1234"
+    },
+    {
+      "type": "office",
+      "number": "646 555-4567"
+    }
+  ],
+  "children": [],
+  "spouse": null
+}
+@endjson
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startjson
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "isAlive": true,
+  "age": 27,
+  "address": {
+    "streetAddress": "21 2nd Street",
+    "city": "New York",
+    "state": "NY",
+    "postalCode": "10021-3100"
+  },
+  "phoneNumbers": [
+    {
+      "type": "home",
+      "number": "212 555-1234"
+    },
+    {
+      "type": "office",
+      "number": "646 555-4567"
+    }
+  ],
+  "children": [],
+  "spouse": null
+}
+@endjson
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startyaml
+doe: "a deer, a female deer"
+ray: "a drop of golden sun"
+pi: 3.14159
+xmas: true
+french-hens: 3
+calling-birds: 
+	- huey
+	- dewey
+	- louie
+	- fred
+xmas-fifth-day: 
+	calling-birds: four
+	french-hens: 3
+	golden-rings: 5
+	partridges: 
+		count: 1
+		location: "a pear tree"
+	turtle-doves: two
+@endyaml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startyaml
+doe: "a deer, a female deer"
+ray: "a drop of golden sun"
+pi: 3.14159
+xmas: true
+french-hens: 3
+calling-birds: 
+	- huey
+	- dewey
+	- louie
+	- fred
+xmas-fifth-day: 
+	calling-birds: four
+	french-hens: 3
+	golden-rings: 5
+	partridges: 
+		count: 1
+		location: "a pear tree"
+	turtle-doves: two
+@endyaml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startsalt
+{+
+{* File | Edit | Source | Refactor }
+{/ General | Fullscreen | Behavior | Saving }
+{
+{ Open image in: | ^Smart Mode^ }
+[X] Smooth images when zoomed
+[X] Confirm image deletion
+[ ] Show hidden images
+}
+[Close]
+}
+@endsalt
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startsalt
+{+
+{* File | Edit | Source | Refactor }
+{/ General | Fullscreen | Behavior | Saving }
+{
+{ Open image in: | ^Smart Mode^ }
+[X] Smooth images when zoomed
+[X] Confirm image deletion
+[ ] Show hidden images
+}
+[Close]
+}
+@endsalt
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+skinparam rectangle<<behavior>> {
+	roundCorner 25
+}
+sprite $bProcess jar:archimate/business-process
+sprite $aService jar:archimate/application-service
+sprite $aComponent jar:archimate/application-component
+
+rectangle "Handle claim"  as HC <<$bProcess>><<behavior>> #Business
+rectangle "Capture Information"  as CI <<$bProcess>><<behavior>> #Business
+rectangle "Notify\nAdditional Stakeholders" as NAS <<$bProcess>><<behavior>> #Business
+rectangle "Validate" as V <<$bProcess>><<behavior>> #Business
+rectangle "Investigate" as I <<$bProcess>><<behavior>> #Business
+rectangle "Pay" as P <<$bProcess>><<behavior>> #Business
+
+HC *-down- CI
+HC *-down- NAS
+HC *-down- V
+HC *-down- I
+HC *-down- P
+
+CI -right->> NAS
+NAS -right->> V
+V -right->> I
+I -right->> P
+
+rectangle "Scanning" as scanning <<$aService>><<behavior>> #Application
+rectangle "Customer admnistration" as customerAdministration <<$aService>><<behavior>> #Application
+rectangle "Claims admnistration" as claimsAdministration <<$aService>><<behavior>> #Application
+rectangle Printing <<$aService>><<behavior>> #Application
+rectangle Payment <<$aService>><<behavior>> #Application
+
+scanning -up-> CI
+customerAdministration  -up-> CI
+claimsAdministration -up-> NAS
+claimsAdministration -up-> V
+claimsAdministration -up-> I
+Payment -up-> P
+
+Printing -up-> V
+Printing -up-> P
+
+rectangle "Document\nManagement\nSystem" as DMS <<$aComponent>> #Application
+rectangle "General\nCRM\nSystem" as CRM <<$aComponent>>  #Application
+rectangle "Home & Away\nPolicy\nAdministration" as HAPA <<$aComponent>> #Application
+rectangle "Home & Away\nFinancial\nAdministration" as HFPA <<$aComponent>>  #Application
+
+DMS .up.|> scanning
+DMS .up.|> Printing
+CRM .up.|> customerAdministration
+HAPA .up.|> claimsAdministration
+HFPA .up.|> Payment
+
+legend left
+Example from the "Archisurance case study" (OpenGroup).
+See
+====
+<$bProcess> :business process
+====
+<$aService> : application service
+====
+<$aComponent> : application component
+endlegend
+@enduml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+skinparam rectangle<<behavior>> {
+	roundCorner 25
+}
+sprite $bProcess jar:archimate/business-process
+sprite $aService jar:archimate/application-service
+sprite $aComponent jar:archimate/application-component
+
+rectangle "Handle claim"  as HC <<$bProcess>><<behavior>> #Business
+rectangle "Capture Information"  as CI <<$bProcess>><<behavior>> #Business
+rectangle "Notify\nAdditional Stakeholders" as NAS <<$bProcess>><<behavior>> #Business
+rectangle "Validate" as V <<$bProcess>><<behavior>> #Business
+rectangle "Investigate" as I <<$bProcess>><<behavior>> #Business
+rectangle "Pay" as P <<$bProcess>><<behavior>> #Business
+
+HC *-down- CI
+HC *-down- NAS
+HC *-down- V
+HC *-down- I
+HC *-down- P
+
+CI -right->> NAS
+NAS -right->> V
+V -right->> I
+I -right->> P
+
+rectangle "Scanning" as scanning <<$aService>><<behavior>> #Application
+rectangle "Customer admnistration" as customerAdministration <<$aService>><<behavior>> #Application
+rectangle "Claims admnistration" as claimsAdministration <<$aService>><<behavior>> #Application
+rectangle Printing <<$aService>><<behavior>> #Application
+rectangle Payment <<$aService>><<behavior>> #Application
+
+scanning -up-> CI
+customerAdministration  -up-> CI
+claimsAdministration -up-> NAS
+claimsAdministration -up-> V
+claimsAdministration -up-> I
+Payment -up-> P
+
+Printing -up-> V
+Printing -up-> P
+
+rectangle "Document\nManagement\nSystem" as DMS <<$aComponent>> #Application
+rectangle "General\nCRM\nSystem" as CRM <<$aComponent>>  #Application
+rectangle "Home & Away\nPolicy\nAdministration" as HAPA <<$aComponent>> #Application
+rectangle "Home & Away\nFinancial\nAdministration" as HFPA <<$aComponent>>  #Application
+
+DMS .up.|> scanning
+DMS .up.|> Printing
+CRM .up.|> customerAdministration
+HAPA .up.|> claimsAdministration
+HFPA .up.|> Payment
+
+legend left
+Example from the "Archisurance case study" (OpenGroup).
+See
+====
+<$bProcess> :business process
+====
+<$aService> : application service
+====
+<$aComponent> : application component
+endlegend
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startgantt
+Project starts the 20th of september 2021
+saturday are closed
+sunday are closed
+
+[Task1] lasts 4 days
+then [Task1.1] lasts 4 days
+[Task1.2] starts at [Task1]'s end and lasts 7 days
+
+[Task2] lasts 5 days
+then [Task2.1] lasts 4 days
+
+[MaxTaskEnd] happens at [Task1.1]'s end
+[MaxTaskEnd] happens at [Task1.2]'s end
+[MaxTaskEnd] happens at [Task2.1]'s end
+
+@endgantt
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startgantt
+Project starts the 20th of september 2021
+saturday are closed
+sunday are closed
+
+[Task1] lasts 4 days
+then [Task1.1] lasts 4 days
+[Task1.2] starts at [Task1]'s end and lasts 7 days
+
+[Task2] lasts 5 days
+then [Task2.1] lasts 4 days
+
+[MaxTaskEnd] happens at [Task1.1]'s end
+[MaxTaskEnd] happens at [Task1.2]'s end
+[MaxTaskEnd] happens at [Task2.1]'s end
+
+@endgantt
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startmindmap
++ OS
+++ Ubuntu
++++ Linux Mint
++++ Kubuntu
++++ Lubuntu
++++ KDE Neon
+++ LMDE
+++ SolydXK
+++ SteamOS
+++ Raspbian
+-- Windows 95
+-- Windows 98
+-- Windows NT
+--- Windows 8
+--- Windows 10
+@endmindmap
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startmindmap
++ OS
+++ Ubuntu
++++ Linux Mint
++++ Kubuntu
++++ Lubuntu
++++ KDE Neon
+++ LMDE
+++ SolydXK
+++ SteamOS
+++ Raspbian
+-- Windows 95
+-- Windows 98
+-- Windows NT
+--- Windows 8
+--- Windows 10
+@endmindmap
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startwbs
+* Business Process Modelling WBS
+** Launch the project
+*** Complete Stakeholder Research
+*** Initial Implementation Plan
+** Design phase
+*** Model of AsIs Processes Completed
+**** Model of AsIs Processes Completed1
+**** Model of AsIs Processes Completed2
+*** Measure AsIs performance metrics
+*** Identify Quick Wins
+** Complete innovate phase
+@endwbs
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startwbs
+* Business Process Modelling WBS
+** Launch the project
+*** Complete Stakeholder Research
+*** Initial Implementation Plan
+** Design phase
+*** Model of AsIs Processes Completed
+**** Model of AsIs Processes Completed1
+**** Model of AsIs Processes Completed2
+*** Measure AsIs performance metrics
+*** Identify Quick Wins
+** Complete innovate phase
+@endwbs
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "Entity01" as e01 {
+  *e1_id : number <<generated>>
+  --
+  *name : text
+  description : text
+}
+
+entity "Entity02" as e02 {
+  *e2_id : number <<generated>>
+  --
+  *e1_id : number <<FK>>
+  other_details : text
+}
+
+entity "Entity03" as e03 {
+  *e3_id : number <<generated>>
+  --
+  e1_id : number <<FK>>
+  other_details : text
+}
+
+e01 ||..o{ e02
+e01 |o..o{ e03
+
+@enduml
+----
+
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "Entity01" as e01 {
+  *e1_id : number <<generated>>
+  --
+  *name : text
+  description : text
+}
+
+entity "Entity02" as e02 {
+  *e2_id : number <<generated>>
+  --
+  *e1_id : number <<FK>>
+  other_details : text
+}
+
+entity "Entity03" as e03 {
+  *e3_id : number <<generated>>
+  --
+  e1_id : number <<FK>>
+  other_details : text
+}
+
+e01 ||..o{ e02
+e01 |o..o{ e03
+
+@enduml
+----
+
+[%notitle]
+== Plantuml Example
+[plantuml]
+----
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title System Context diagram for Internet Banking System
+
+Person(customer, "Banking Customer", "A customer of the bank, with personal bank accounts.")
+System(banking_system, "Internet Banking System", "Allows customers to check their accounts.")
+
+System_Ext(mail_system, "E-mail system", "The internal Microsoft Exchange e-mail system.")
+System_Ext(mainframe, "Mainframe Banking System", "Stores all of the core banking information.")
+
+Rel(customer, banking_system, "Uses")
+Rel_Back(customer, mail_system, "Sends e-mails to")
+Rel_Neighbor(banking_system, mail_system, "Sends e-mails", "SMTP")
+Rel(banking_system, mainframe, "Uses")
+@enduml
+----
+
+[%notitle]
+== Plantuml Source
+[source]
+----
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title System Context diagram for Internet Banking System
+
+Person(customer, "Banking Customer", "A customer of the bank, with personal bank accounts.")
+System(banking_system, "Internet Banking System", "Allows customers to check their accounts.")
+
+System_Ext(mail_system, "E-mail system", "The internal Microsoft Exchange e-mail system.")
+System_Ext(mainframe, "Mainframe Banking System", "Stores all of the core banking information.")
+
+Rel(customer, banking_system, "Uses")
+Rel_Back(customer, mail_system, "Sends e-mails to")
+Rel_Neighbor(banking_system, mail_system, "Sends e-mails", "SMTP")
+Rel(banking_system, mainframe, "Uses")
+@enduml
+----
